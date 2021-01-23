@@ -1,12 +1,11 @@
 package es.menasoft.recipe.domain;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+@Entity
 public class Ingredient {
 
     @Id
@@ -16,8 +15,8 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
-    // TODO: uncommet it when the proper entity is created.
-    //private UnitOfMeasure uom;
+    @OneToOne
+    private UnitOfMeasure uom;
 
     @ManyToOne
     private Recipe recipe;
@@ -44,6 +43,14 @@ public class Ingredient {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public UnitOfMeasure getUom() {
+        return uom;
+    }
+
+    public void setUom(UnitOfMeasure uom) {
+        this.uom = uom;
     }
 
     public Recipe getRecipe() {
