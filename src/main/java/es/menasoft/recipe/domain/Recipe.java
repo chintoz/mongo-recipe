@@ -2,6 +2,8 @@ package es.menasoft.recipe.domain;
 
 import javax.persistence.*;
 
+import java.util.Set;
+
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -22,6 +24,9 @@ public class Recipe {
 
     // TODO uncomment it when Dificulty enum is created
     //private Difficulty difficulty
+
+    @OneToMany(cascade = ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
 
     @Lob
     private Byte[] image;
@@ -91,6 +96,14 @@ public class Recipe {
 
     public void setDirections(String directions) {
         this.directions = directions;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Byte[] getImage() {
