@@ -1,10 +1,10 @@
 package es.menasoft.recipe.domain;
 
 import javax.persistence.*;
-
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -22,8 +22,8 @@ public class Recipe {
     private String url;
     private String directions;
 
-    // TODO uncomment it when Dificulty enum is created
-    //private Difficulty difficulty
+    @Enumerated(value = STRING)
+    private Difficulty difficulty;
 
     @OneToMany(cascade = ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
@@ -96,6 +96,14 @@ public class Recipe {
 
     public void setDirections(String directions) {
         this.directions = directions;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public Set<Ingredient> getIngredients() {
