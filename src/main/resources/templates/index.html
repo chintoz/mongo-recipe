@@ -5,7 +5,34 @@
     <title>Title</title>
 </head>
 <body>
+<!--/*@thymesVar is="owner" type="es.menasoft.recipe.domain.Recipe"*/-->
+
 <h1>My Recipes!</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Description</th>
+            <th>Preparation Time</th>
+            <th>Cook Time</th>
+            <th>Servings</th>
+            <th>URL</th>
+            <th>Difficulty</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="recipe:${recipes}">
+            <td th:text="${recipe.id}">1</td>
+            <td th:text="${recipe.description}">My recipe</td>
+            <td th:text="${recipe.prepTime}">1</td>
+            <td th:text="${recipe.cookTime}">1</td>
+            <td th:text="${recipe.servings}">1</td>
+            <td><a th:href="${recipe.url}" target="_blank">Link</a></td>
+            <td th:text="${recipe.difficulty}">HARD</td>
+        </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

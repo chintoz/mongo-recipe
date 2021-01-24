@@ -1,31 +1,22 @@
 package es.menasoft.recipe.controllers;
 
-import es.menasoft.recipe.domain.Category;
-import es.menasoft.recipe.domain.UnitOfMeasure;
-import es.menasoft.recipe.repository.CategoryRepository;
-import es.menasoft.recipe.repository.UnitOfMeasureRepository;
+import es.menasoft.recipe.service.RecipeService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Optional;
 
 @Controller
 public class IndexController {
 
-    private final CategoryRepository categoryRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final RecipeService recipeService;
 
-    public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
+    public IndexController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
     @RequestMapping({"", "/", "/index"})
-    public String getIndexPage() {
-        Optional<Category> category = categoryRepository.findByDescription("American");
-        Optional<UnitOfMeasure> unitOfMeasure = unitOfMeasureRepository.findByDescription("Teaspoon");
-        System.out.println("Category id: " + category.get().getId());
-        System.out.println("UOM id: " + unitOfMeasure.get().getId());
+    public String getIndexPage(Model model) {
+        model.addAttribute("recipes", recipeService.findAll());
         return "index";
     }
 }
