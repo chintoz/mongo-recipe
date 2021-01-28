@@ -4,6 +4,7 @@ import es.menasoft.recipe.domain.*;
 import es.menasoft.recipe.repository.CategoryRepository;
 import es.menasoft.recipe.repository.RecipeRepository;
 import es.menasoft.recipe.repository.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 @Component
+@Slf4j
 public class DataLoader implements CommandLineRunner {
 
     private final RecipeRepository recipeRepository;
@@ -69,7 +71,8 @@ public class DataLoader implements CommandLineRunner {
 
 
                 Read more: http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/#ixzz4jvu7Q0MJ""");
-        tacosNotes.setRecipe(tacosRecipe);
+
+        tacosRecipe.setNotes(tacosNotes);
 
         tacosRecipe.setCategories(of(categoryMap.get("Mexican")));
 
@@ -80,6 +83,8 @@ public class DataLoader implements CommandLineRunner {
                 .addingIngredient(new Ingredient(valueOf((double) 1 / 2), "salt", unitOfMeasureMap.get("Teaspoon")));
 
         recipeRepository.save(tacosRecipe);
+
+        log.info("Saved Tacos Recipe");
 
 
         // Guacamole Recipe
@@ -112,7 +117,7 @@ public class DataLoader implements CommandLineRunner {
 
 
                 Read more: http://www.simplyrecipes.com/recipes/perfect_guacamole/#ixzz4jvoun5ws""");
-        guacamoleNotes.setRecipe(guacamoleRecipe);
+        guacamoleRecipe.setNotes(guacamoleNotes);
 
         guacamoleRecipe.setCategories(of(categoryMap.get("Mexican")));
 
@@ -123,6 +128,8 @@ public class DataLoader implements CommandLineRunner {
                 .addingIngredient(new Ingredient(valueOf(1), "freshly grated black pepper", unitOfMeasureMap.get("Dash")));
 
         recipeRepository.save(guacamoleRecipe);
+
+        log.info("Saved Guacamole Recipe");
 
     }
 
