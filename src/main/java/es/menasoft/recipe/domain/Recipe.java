@@ -1,9 +1,6 @@
 package es.menasoft.recipe.domain;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,6 +12,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Recipe {
 
     @Id
