@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
+
+    <!-- Bootstrap imports -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+            crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <!--/*@thymesVar is="owner" type="es.menasoft.recipe.domain.Recipe"*/-->
 
-<h1>My Recipes!</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Description</th>
-            <th>Preparation Time</th>
-            <th>Cook Time</th>
-            <th>Servings</th>
-            <th>URL</th>
-            <th>Difficulty</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="recipe:${recipes}">
-            <td th:text="${recipe.id}">1</td>
-            <td th:text="${recipe.description}">My recipe</td>
-            <td th:text="${recipe.prepTime}">1</td>
-            <td th:text="${recipe.cookTime}">1</td>
-            <td th:text="${recipe.servings}">1</td>
-            <td><a th:href="${recipe.url}" target="_blank">Link</a></td>
-            <td th:text="${recipe.difficulty}">HARD</td>
-        </tr>
-    </tbody>
-</table>
+<div clas="container-fluid" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="card border-primary">
+                <div class="card-header bg-primary">
+                    <h1>My Recipes!</h1>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table table-hover">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>Id</th>
+                                <th>Description</th>
+                                <th>Preparation Time</th>
+                                <th>Cook Time</th>
+                                <th>Servings</th>
+                                <th>URL</th>
+                                <th>Difficulty</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:remove="all">
+                                <td>123</td>
+                                <td>Description</td>
+                            </tr>
+                            <tr th:each="recipe:${recipes}">
+                                <td th:text="${recipe.id}">1</td>
+                                <td th:text="${recipe.description}">My recipe</td>
+                                <td th:text="${recipe.prepTime}">1</td>
+                                <td th:text="${recipe.cookTime}">1</td>
+                                <td th:text="${recipe.servings}">1</td>
+                                <td><a th:href="${recipe.url}" target="_blank">Link</a></td>
+                                <td th:text="${recipe.difficulty}">HARD</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
