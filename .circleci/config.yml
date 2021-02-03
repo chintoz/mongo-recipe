@@ -7,13 +7,7 @@ workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
-jobs:
-  executor: my_executor
-executors:
-  my_executor:
-    docker:
-      - image: 'cimg/openjdk:<<parameters.tag>>'
-    parameters:
-      tag:
-        default: "15.0"
-        type: string
+parameters:
+  tag:
+    type: string
+    default: "15.0"
