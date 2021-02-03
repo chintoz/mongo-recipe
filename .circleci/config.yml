@@ -4,7 +4,6 @@ orbs:
   maven: circleci/maven@1.1.0
 
 workflows:
-  executor: my_executor
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
