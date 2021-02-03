@@ -4,8 +4,15 @@ orbs:
   maven: circleci/maven@1.1.0
 
 workflows:
+  executor: my_executor
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
-executor:
-  tag: 15.0
+executors:
+  my_executor:
+    docker:
+      - image: 'cimg/openjdk:<<parameters.tag>>'
+    parameters:
+      tag:
+        default: "15.0"
+        type: string
