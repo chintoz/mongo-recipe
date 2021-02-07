@@ -23,4 +23,9 @@ public class RecipeServiceImpl implements RecipeService {
         return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Recipe findById(Long id) {
+        return recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
+    }
 }

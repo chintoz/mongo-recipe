@@ -33,26 +33,19 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Description</th>
-                                <th>Preparation Time</th>
-                                <th>Cook Time</th>
-                                <th>Servings</th>
-                                <th>URL</th>
-                                <th>Difficulty</th>
+                                <th>View</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:remove="all">
                                 <td>123</td>
                                 <td>Description</td>
+                                <td><a href="#">View</a></td>
                             </tr>
                             <tr th:each="recipe:${recipes}">
                                 <td th:text="${recipe.id}">1</td>
                                 <td th:text="${recipe.description}">My recipe</td>
-                                <td th:text="${recipe.prepTime}">1</td>
-                                <td th:text="${recipe.cookTime}">1</td>
-                                <td th:text="${recipe.servings}">1</td>
-                                <td><a th:href="${recipe.url}" target="_blank">Link</a></td>
-                                <td th:text="${recipe.difficulty}">HARD</td>
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
                             </tr>
                             </tbody>
                         </table>
