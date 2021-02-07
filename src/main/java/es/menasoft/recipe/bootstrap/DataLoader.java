@@ -119,7 +119,7 @@ public class DataLoader implements CommandLineRunner {
                 Read more: http://www.simplyrecipes.com/recipes/perfect_guacamole/#ixzz4jvoun5ws""");
         guacamoleRecipe.setNotes(guacamoleNotes);
 
-        guacamoleRecipe.setCategories(of(categoryMap.get("Mexican")));
+        guacamoleRecipe.setCategories(of(categoryMap.get("Mexican"), categoryMap.get("Fast Food")));
 
         guacamoleRecipe.addingIngredient(new Ingredient(valueOf(2), "ripe avocados", unitOfMeasureMap.get("Each")))
                 .addingIngredient(new Ingredient(valueOf((double) 1 / 4), "salt", unitOfMeasureMap.get("Teaspoon")))
