@@ -1,7 +1,6 @@
 package es.menasoft.recipe.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +13,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category {
 
     @Id

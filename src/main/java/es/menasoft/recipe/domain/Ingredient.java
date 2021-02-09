@@ -1,5 +1,7 @@
 package es.menasoft.recipe.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,6 +12,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
 public class Ingredient {
 
     @Id

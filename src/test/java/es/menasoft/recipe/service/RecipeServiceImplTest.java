@@ -1,5 +1,6 @@
 package es.menasoft.recipe.service;
 
+import es.menasoft.recipe.converters.*;
 import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,11 @@ class RecipeServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository,
+                new RecipeToRecipeCommand(new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+                        new NotesToNotesCommand(), new CategoryToCategoryCommand()),
+                new RecipeCommandToRecipe(new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+                        new NotesCommandToNotes(), new CategoryCommandToCategory()));
     }
 
     @Test

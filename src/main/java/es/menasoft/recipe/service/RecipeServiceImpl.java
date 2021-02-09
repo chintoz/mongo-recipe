@@ -1,11 +1,15 @@
 package es.menasoft.recipe.service;
 
+import es.menasoft.recipe.commands.RecipeCommand;
+import es.menasoft.recipe.converters.RecipeCommandToRecipe;
+import es.menasoft.recipe.converters.RecipeToRecipeCommand;
 import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -16,6 +20,8 @@ import java.util.stream.StreamSupport;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
 
     @Override
     public List<Recipe> findAll() {
@@ -27,5 +33,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe findById(Long id) {
         return recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+        Recipe recipe = recipeRepository.save(recipeCommandToRecipe.convert(command));
+        log.debug("Recipe saved with Id: " + recipe.getId());
+        return recipeToRecipeCommand.convert(recipe);
     }
 }
