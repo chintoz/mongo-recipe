@@ -36,6 +36,7 @@ public class Recipe {
 
     @OneToMany(cascade = ALL, mappedBy = "recipe")
     @EqualsAndHashCode.Exclude
+    @Builder.Default
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @Lob
@@ -51,6 +52,7 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     @EqualsAndHashCode.Exclude
+    @Builder.Default
     private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {

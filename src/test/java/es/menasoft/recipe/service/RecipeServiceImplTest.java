@@ -1,5 +1,6 @@
 package es.menasoft.recipe.service;
 
+import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.converters.*;
 import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.repository.RecipeRepository;
@@ -66,6 +67,41 @@ class RecipeServiceImplTest {
 
         assertThrows(RuntimeException.class, () -> recipeService.findById(1L));
         verify(recipeRepository).findById(eq(1L));
+
+    }
+
+    @Test
+    void saveRecipeCommand() {
+        when(recipeRepository.save(any())).thenReturn(Recipe.builder().id(1L).build());
+
+        RecipeCommand command = recipeService.saveRecipeCommand(RecipeCommand.builder().id(1L).build());
+
+        assertNotNull(command);
+        assertEquals(1L, command.getId());
+        verify(recipeRepository, times(1)).save(any());
+
+    }
+
+    @Test
+    void findCommandByExistingId() {
+
+        when(recipeRepository.findById(1L)).thenReturn(Optional.of(Recipe.builder().id(1L).build()));
+
+        RecipeCommand command = recipeService.findCommandById(1L);
+
+        assertNotNull(command);
+        assertEquals(1L, command.getId());
+        verify(recipeRepository, times(1)).findById(1L);
+
+    }
+
+    @Test
+    void findCommandByNotExistingId() {
+
+        when(recipeRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> recipeService.findCommandById(1L));
+        verify(recipeRepository, times(1)).findById(1L);
 
     }
 }

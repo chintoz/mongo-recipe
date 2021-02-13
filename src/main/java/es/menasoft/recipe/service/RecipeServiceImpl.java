@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -41,5 +42,11 @@ public class RecipeServiceImpl implements RecipeService {
         Recipe recipe = recipeRepository.save(recipeCommandToRecipe.convert(command));
         log.debug("Recipe saved with Id: " + recipe.getId());
         return recipeToRecipeCommand.convert(recipe);
+    }
+
+    @Override
+    public RecipeCommand findCommandById(Long id) {
+        Optional<Recipe> recipe = recipeRepository.findById(id);
+        return recipe.map(recipeToRecipeCommand::convert).stream().findFirst().orElseThrow(() -> new RuntimeException("Recipe not found"));
     }
 }
