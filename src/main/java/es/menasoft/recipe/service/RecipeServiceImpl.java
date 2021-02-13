@@ -49,4 +49,9 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         return recipe.map(recipeToRecipeCommand::convert).stream().findFirst().orElseThrow(() -> new RuntimeException("Recipe not found"));
     }
+
+    @Override
+    public void deleteById(Long id) {
+        recipeRepository.deleteById(id);
+    }
 }
