@@ -87,7 +87,14 @@
                 </div>
                 <div class="card border-primary">
                     <div class="card-header">
-                        <h1 class="card-title" >Ingredients</h1>
+                        <div class="row">
+                            <div class="col-md-10 ">
+                                <h1 class="panel-title">Ingredients</h1>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}"  role="button">View</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
