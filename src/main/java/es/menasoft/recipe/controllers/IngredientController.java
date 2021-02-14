@@ -1,13 +1,17 @@
 package es.menasoft.recipe.controllers;
 
+import es.menasoft.recipe.commands.IngredientCommand;
 import es.menasoft.recipe.service.IngredientService;
 import es.menasoft.recipe.service.RecipeService;
+import es.menasoft.recipe.service.UnitOfMeasureService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,6 +20,7 @@ public class IngredientController {
 
     private final RecipeService recipeService;
     private final IngredientService ingredientService;
+    private final UnitOfMeasureService unitOfMeasureService;
 
     @GetMapping("/recipe/{recipeId}/ingredients")
     public String listIngredients(@PathVariable String recipeId, Model model) {
@@ -25,9 +30,27 @@ public class IngredientController {
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/{id}/show")
-    public String showIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
+    public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
         model.addAttribute("ingredient", ingredientService
                 .findByRecipeIdAndIngredientId(Long.parseLong(recipeId), Long.parseLong(id)));
         return "recipe/ingredient/show";
+    }
+
+    @GetMapping("/recipe/{recipeId}/ingredient/{id}/update")
+    public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.parseLong(recipeId), Long.parseLong(id)));
+        model.addAttribute("uomList", unitOfMeasureService.listAll());
+        return "recipe/ingredient/ingredientform";
+    }
+
+    @PostMapping("recipe/{recipeId}/ingredient")
+    public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
+        IngredientCommand ingredient = ingredientService.saveIngredientCommand(command);
+
+        log.debug("Saved recipe id: {}", ingredient.getRecipeId());
+        log.debug("Saved ingredient id: {}", ingredient.getId());
+
+        return "redirect:/recipe/" + ingredient.getRecipeId() + "/ingredient/" + ingredient.getId() + "/show";
+
     }
 }
