@@ -1,6 +1,7 @@
 package es.menasoft.recipe.controllers;
 
 import es.menasoft.recipe.commands.IngredientCommand;
+import es.menasoft.recipe.commands.UnitOfMeasureCommand;
 import es.menasoft.recipe.service.IngredientService;
 import es.menasoft.recipe.service.RecipeService;
 import es.menasoft.recipe.service.UnitOfMeasureService;
@@ -39,6 +40,15 @@ public class IngredientController {
     @GetMapping("/recipe/{recipeId}/ingredient/{id}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
         model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.parseLong(recipeId), Long.parseLong(id)));
+        model.addAttribute("uomList", unitOfMeasureService.listAll());
+        return "recipe/ingredient/ingredientform";
+    }
+
+    @GetMapping("/recipe/{recipeId}/ingredient/new")
+    public String newRecipeIngredient(@PathVariable String recipeId, Model model) {
+        model.addAttribute("recipe", recipeService.findCommandById(Long.parseLong(recipeId)));
+        model.addAttribute("ingredient", IngredientCommand.builder().recipeId(Long.parseLong(recipeId))
+                .unitOfMeasure(UnitOfMeasureCommand.builder().build()).build());
         model.addAttribute("uomList", unitOfMeasureService.listAll());
         return "recipe/ingredient/ingredientform";
     }

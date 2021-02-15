@@ -10,7 +10,10 @@ import es.menasoft.recipe.repository.UnitOfMeasureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +50,10 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
                 .filter(i -> i.getId().equals(ingredientCommand.getId())).findFirst();
 
+        List<Long> existingIngredients;
+
         if (ingredientOptional.isPresent()) {
+            existingIngredients = null;
             Ingredient ingredient = ingredientOptional.get();
             ingredient.setDescription(ingredientCommand.getDescription());
             ingredient.setAmount(ingredientCommand.getAmount());
@@ -55,14 +61,23 @@ public class IngredientServiceImpl implements IngredientService {
                     .orElseThrow(() -> new RuntimeException("Unit of Measure not found")));
 
         } else {
+            existingIngredients = recipe.getIngredients().stream().map(Ingredient::getId).collect(Collectors.toList());
             recipe.addingIngredient(ingredientCommandToIngredient.convert(ingredientCommand));
         }
 
         Recipe savedRecipe = recipeRepository.save(recipe);
 
-        return savedRecipe.getIngredients().stream().filter(i -> i.getId().equals(ingredientCommand.getId()))
+        return savedRecipe.getIngredients().stream()
+                .filter(i -> i.getId().equals(ingredientCommand.getId()))
                 .map(ingredientToIngredientCommand::convert)
-                .findFirst().orElseThrow(() -> new RuntimeException("Ingredient not found"));
+                .findFirst()
+                .orElseGet(() -> ingredientToIngredientCommand.convert(findNewIngredient(existingIngredients, savedRecipe.getIngredients())));
 
+    }
+
+    private Ingredient findNewIngredient(List<Long> existingIngredients, Set<Ingredient> ingredients) {
+        return ingredients.stream()
+                .filter(ingredient -> !existingIngredients.contains(ingredient.getId()))
+                .findFirst().orElseThrow(() -> new RuntimeException("Ingredient created not found"));
     }
 }

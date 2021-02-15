@@ -98,6 +98,28 @@ class IngredientControllerTest {
 
     @Test
     @SneakyThrows
+    void newRecipeIngredient() {
+
+        mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
+
+        when(recipeService.findCommandById(eq(1L)))
+                .thenReturn(RecipeCommand.builder().id(1L).build());
+
+        when(unitOfMeasureService.listAll()).thenReturn(List.of(UnitOfMeasureCommand.builder().build()));
+
+        mockMvc.perform(get("/recipe/1/ingredient/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/ingredientform"))
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(model().attributeExists("uomList"));
+
+        verify(recipeService, times(1)).findCommandById(eq(1L));
+        verify(unitOfMeasureService, times(1)).listAll();
+    }
+
+    @Test
+    @SneakyThrows
     void saveOrUpdate() {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
