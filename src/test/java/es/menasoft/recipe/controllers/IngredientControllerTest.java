@@ -136,4 +136,16 @@ class IngredientControllerTest {
     }
 
 
+    @Test
+    @SneakyThrows
+    void deleteRecipeIngredient() {
+
+        mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
+
+        mockMvc.perform(get("/recipe/1/ingredient/1/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/1/ingredients"));
+
+        verify(ingredientService, times(1)).deleteByRecipeIdAndIngredientId(eq(1L), eq(1L));
+    }
 }

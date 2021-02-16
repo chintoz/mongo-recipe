@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -83,5 +84,19 @@ class IngredientServiceImplTest {
         verify(recipeRepository, times(1)).save(any());
         verify(unitOfMeasureRepository, times(1)).findById(eq(1L));
 
+    }
+
+    @Test
+    void deleteByRecipeIdAndIngredientId() {
+        Set<Ingredient> ingredients = new HashSet<>();
+        ingredients.add(Ingredient.builder().id(1L).uom(UnitOfMeasure.builder().id(1L).build()).build());
+        Recipe recipe = Recipe.builder().id(1L).ingredients(ingredients).build();
+        when(recipeRepository.findById(eq(1L))).thenReturn(Optional.of(recipe));
+        when(recipeRepository.save(any())).thenReturn( Recipe.builder().id(1L).build());
+
+        ingredientService.deleteByRecipeIdAndIngredientId(1L, 1L);
+
+        verify(recipeRepository, times(1)).findById(eq(1L));
+        verify(recipeRepository, times(1)).save(any());
     }
 }
