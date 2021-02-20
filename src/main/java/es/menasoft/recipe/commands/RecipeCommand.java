@@ -27,5 +27,6 @@ public class RecipeCommand {
     private NotesCommand notes;
     @Builder.Default
     private Set<CategoryCommand> categories = new HashSet<>();
+    private Byte[] image;
 
 }

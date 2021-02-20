@@ -46,6 +46,7 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
                 .notes(notesToNotesCommand.convert(source.getNotes()))
                 .ingredients(ingredientCommands)
                 .categories(categoryCommands)
+                .image(source.getImage())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package es.menasoft.recipe.converters;
 
 import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.domain.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +35,7 @@ class RecipeToRecipeCommandTest {
                 .notes(Notes.builder().build())
                 .categories(Set.of(Category.builder().build()))
                 .ingredients(Set.of(Ingredient.builder().build()))
+                .image(ArrayUtils.toObject("Data".getBytes()))
                 .build());
 
         assertNotNull(recipeCommand);
@@ -49,6 +51,7 @@ class RecipeToRecipeCommandTest {
         assertNotNull(recipeCommand.getNotes());
         assertEquals(1, recipeCommand.getCategories().size());
         assertEquals(1, recipeCommand.getIngredients().size());
+        assertEquals("Data".getBytes().length, ArrayUtils.toPrimitive(recipeCommand.getImage()).length);
 
     }
 }
