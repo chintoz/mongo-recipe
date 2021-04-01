@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -53,9 +55,10 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound() {
+    public ModelAndView handleNotFound(NotFoundException exception) {
         log.error("Handling not found exception");
-        return new ModelAndView("404error");
+        log.error(exception.getMessage());
+        return new ModelAndView("404error", Map.of("exception", exception));
     }
 
 }
