@@ -60,6 +60,16 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    void testShowRecipeNotNumber() {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        mockMvc.perform(get("/recipe/asd/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
+    }
+
+    @Test
+    @SneakyThrows
     void testNewRecipe() {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
