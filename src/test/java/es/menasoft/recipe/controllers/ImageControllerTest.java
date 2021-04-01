@@ -1,6 +1,7 @@
 package es.menasoft.recipe.controllers;
 
 import es.menasoft.recipe.commands.RecipeCommand;
+import es.menasoft.recipe.controllers.handler.ControllerExceptionHandler;
 import es.menasoft.recipe.service.ImageService;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.SneakyThrows;
@@ -52,6 +53,18 @@ class ImageControllerTest {
                 .andExpect(model().attributeExists("recipe"));
 
         verify(recipeService, times(1)).findCommandById(eq(1L));
+    }
+
+    @Test
+    @SneakyThrows
+    void loadImageFormNotNumber() {
+        mockMvc = MockMvcBuilders.standaloneSetup(imageController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
+
+        mockMvc.perform(get("/recipe/asd/image"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
     }
 
     @Test

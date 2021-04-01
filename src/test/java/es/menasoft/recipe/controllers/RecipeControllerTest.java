@@ -1,6 +1,7 @@
 package es.menasoft.recipe.controllers;
 
 import es.menasoft.recipe.commands.RecipeCommand;
+import es.menasoft.recipe.controllers.handler.ControllerExceptionHandler;
 import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.exception.NotFoundException;
 import es.menasoft.recipe.service.RecipeService;
@@ -61,7 +62,9 @@ class RecipeControllerTest {
     @Test
     @SneakyThrows
     void testShowRecipeNotNumber() {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
 
         mockMvc.perform(get("/recipe/asd/show"))
                 .andExpect(status().isBadRequest())
