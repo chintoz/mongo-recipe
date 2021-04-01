@@ -2,6 +2,7 @@ package es.menasoft.recipe.controllers;
 
 import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.domain.Recipe;
+import es.menasoft.recipe.exception.NotFoundException;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,17 @@ class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
+    }
+
+    @Test
+    @SneakyThrows
+    void testShowRecipeNotFound() {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        when(recipeService.findById(1L)).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

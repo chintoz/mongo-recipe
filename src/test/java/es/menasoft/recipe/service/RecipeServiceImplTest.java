@@ -3,6 +3,7 @@ package es.menasoft.recipe.service;
 import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.converters.*;
 import es.menasoft.recipe.domain.Recipe;
+import es.menasoft.recipe.exception.NotFoundException;
 import es.menasoft.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -100,7 +101,7 @@ class RecipeServiceImplTest {
 
         when(recipeRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> recipeService.findCommandById(1L));
+        assertThrows(NotFoundException.class, () -> recipeService.findCommandById(1L));
         verify(recipeRepository, times(1)).findById(1L);
 
     }
