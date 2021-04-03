@@ -106,9 +106,25 @@ class RecipeControllerTest {
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
-                .param("description", "Description"))
+                .param("description", "Description")
+                .param("directions", "Directions"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/show"));
+    }
+
+    @Test
+    @SneakyThrows
+    void saveOrUpdateWithFail() {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        RecipeCommand command = RecipeCommand.builder().id(2L).build();
+        when(recipeService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(command);
+
+        mockMvc.perform(post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "")
+                .param("description", "Description"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/recipeform"));
     }
 
     @Test
