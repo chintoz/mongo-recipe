@@ -89,7 +89,7 @@ workflows:
           executor: my-executor
           steps:
             - checkout
-            - with_cache:
+            - my_with_cache:
                 app_src_directory: << parameters.app_src_directory >>
                 maven_command: << parameters.maven_command >>
                 settings_file: << parameters.settings_file >>
@@ -102,5 +102,5 @@ workflows:
                         << parameters.maven_command >> << parameters.command >> "$@"
                       name: Run Tests
                       working_directory: << parameters.app_src_directory >>
-            - process_test_results:
+            - my_process_test_results:
                 test_results_path: << parameters.test_results_path >>
