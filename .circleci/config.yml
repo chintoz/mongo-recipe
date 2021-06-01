@@ -9,7 +9,7 @@ executors:
       - image: cimg/openjdk:15.0.1
 
 commands:
-  process_test_results:
+  my_process_test_results:
     description: |
       Upload test results.
       This will populate the Test Summary tab in the CircleCI UI. By default it will
@@ -23,7 +23,7 @@ commands:
     steps:
       - store_test_results:
           path: << parameters.test_results_path >>
-  with_cache:
+  my_with_cache:
     description: |
       Run a set of steps with Maven dependencies cached.
 
@@ -87,3 +87,20 @@ workflows:
     jobs:
       - maven/test: # checkout, build, test, and upload test results
           executor: my-executor
+          steps:
+            - checkout
+            - with_cache:
+                app_src_directory: << parameters.app_src_directory >>
+                maven_command: << parameters.maven_command >>
+                settings_file: << parameters.settings_file >>
+                steps:
+                  - run:
+                      command: |
+                        if [ -n "<< parameters.settings_file >>" ]; then
+                          set -- "$@" --settings "<< parameters.settings_file >>"
+                        fi
+                        << parameters.maven_command >> << parameters.command >> "$@"
+                      name: Run Tests
+                      working_directory: << parameters.app_src_directory >>
+            - process_test_results:
+                test_results_path: << parameters.test_results_path >>
