@@ -13,5 +13,6 @@ workflows:
     jobs:
       - maven/test: # checkout, build, test, and upload test results
           executor: my-executor
-          with_cache:
-            verify_dependencies: false
+commands:
+  with_cache:
+    verify_dependencies: false
