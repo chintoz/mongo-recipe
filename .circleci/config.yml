@@ -15,4 +15,5 @@ workflows:
           executor: my-executor
 commands:
   with_cache:
-    verify_dependencies: false
+    parameters:
+      verify_dependencies: false
