@@ -1,106 +1,43 @@
-version: 2.1
-
-orbs:
-  maven: circleci/maven@1.2.0
-
-executors:
-  my-executor:
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
     docker:
+      # specify the version you desire here
       - image: cimg/openjdk:15.0.1
 
-commands:
-  my_process_test_results:
-    description: |
-      Upload test results.
-      This will populate the Test Summary tab in the CircleCI UI. By default it will
-      look in `target/surefire-reports` (the default location for maven test results).
-      You can override where to find the test results with the path parameter.
-    parameters:
-      test_results_path:
-        default: target/surefire-reports
-        description: Specify a custom path for maven test results
-        type: string
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
     steps:
-      - store_test_results:
-          path: << parameters.test_results_path >>
-  my_with_cache:
-    description: |
-      Run a set of steps with Maven dependencies cached.
+      - checkout
 
-      This command will first restore a cache of maven dependencies, if one was
-      saved by a previous build. The provided `steps` parameter will then be executed, and
-      if successful, then a fresh cache will be saved, if required.
-
-      The contents of the `~/.m2/repository` directory is cached, which will substantially
-      improve build times for projects with many dependencies.
-
-      The cache-key is generated from any files named `pom.xml` that are
-      present in the `working_directory`.
-    parameters:
-      app_src_directory:
-        default: ""
-        description: Useful when the source of your maven project is nott in the root directory of your git repo. Supply the name of the directory or relative path of the directory containing your source code.
-        type: string
-      maven_command:
-        default: mvn
-        description: Specify a custom path for invoking maven
-        type: string
-      settings_file:
-        default: ""
-        description: Specify a custom settings file to use (optional)
-        type: string
-      steps:
-        type: steps
-      verify_dependencies:
-        default: false
-        description: Verify dependencies are valid and available from public sources
-        type: boolean
-    steps:
-      - run:
-          command: find . -name 'pom.xml' | sort | xargs cat > /tmp/maven_cache_seed
-          name: Generate Cache Checksum
-          working_directory: $CIRCLE_WORKING_DIRECTORY/<< parameters.app_src_directory >>
+      # Download and cache dependencies
       - restore_cache:
-          key: maven-{{ checksum "/tmp/maven_cache_seed" }}
-      - run:
-          command: |
-            if [ -n "<< parameters.settings_file >>" ]; then
-              set -- "$@" --settings "<< parameters.settings_file >>"
-            fi
-          name: Install Dependencies
-          working_directory: << parameters.app_src_directory >>
-      - when:
-          condition: << parameters.verify_dependencies >>
-          steps:
-            - run:
-                command: << parameters.maven_command >> dependency:go-offline "$@"
-                name: Verify dependencies
-                working_directory: << parameters.app_src_directory >>
-      - steps: << parameters.steps >>
-      - save_cache:
-          key: maven-{{ checksum "/tmp/maven_cache_seed" }}
-          paths:
-            - ~/.m2/repository
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
-workflows:
-  maven_test:
-    jobs:
-      - maven/test: # checkout, build, test, and upload test results
-          executor: my-executor
-          steps:
-            - checkout
-            - my_with_cache:
-                app_src_directory: << parameters.app_src_directory >>
-                maven_command: << parameters.maven_command >>
-                settings_file: << parameters.settings_file >>
-                steps:
-                  - run:
-                      command: |
-                        if [ -n "<< parameters.settings_file >>" ]; then
-                          set -- "$@" --settings "<< parameters.settings_file >>"
-                        fi
-                        << parameters.maven_command >> << parameters.command >> "$@"
-                      name: Run Tests
-                      working_directory: << parameters.app_src_directory >>
-            - my_process_test_results:
-                test_results_path: << parameters.test_results_path >>
+      - run: mvn install -DskipTests
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+
+      # run tests!
+      - run: mvn verify
