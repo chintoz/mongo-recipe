@@ -57,6 +57,6 @@ jobs:
       - store_test_results:
           path: target/failsafe-reports
 
-      - codecov/upload:
-          file: target/my-reports/jacoco.xml
-          token: e58a0eec-ba77-402f-b597-f822ae78deb1
+    codecov/upload:
+      file: target/my-reports/jacoco.xml
+      token: e58a0eec-ba77-402f-b597-f822ae78deb1
