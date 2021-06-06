@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>es.menasoft</groupId>
-    <artifactId>recipe</artifactId>
+    <artifactId>mongo-recipe</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>recipe</name>
-    <description>Recipe app</description>
+    <name>mongo-recipe</name>
+    <description>Mongo Recipe app</description>
 
     <properties>
         <java.version>15</java.version>
