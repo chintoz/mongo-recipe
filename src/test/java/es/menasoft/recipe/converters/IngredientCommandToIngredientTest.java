@@ -27,12 +27,12 @@ class IngredientCommandToIngredientTest {
     @Test
     void convert() {
         Ingredient ingredient = converter.convert(IngredientCommand.builder()
-                .id(1L).description("Description").amount(BigDecimal.ONE)
+                .id("1").description("Description").amount(BigDecimal.ONE)
                 .unitOfMeasure(UnitOfMeasureCommand.builder().build())
                 .build());
 
         assertNotNull(ingredient);
-        assertEquals(1L, ingredient.getId());
+        assertEquals("1", ingredient.getId());
         assertEquals("Description", ingredient.getDescription());
         assertEquals(BigDecimal.ONE, ingredient.getAmount());
         assertNotNull(ingredient.getUom());

@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CategoryCommand {
 
-    private Long id;
+    private String id;
     private String description;
 
 }

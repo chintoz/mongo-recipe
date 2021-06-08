@@ -6,6 +6,7 @@ import es.menasoft.recipe.domain.Ingredient;
 import es.menasoft.recipe.domain.Recipe;
 import lombok.RequiredArgsConstructor;
 import lombok.Synchronized;
+import org.bson.types.ObjectId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
                 .collect(Collectors.toSet());
 
         return Recipe.builder()
-                .id(source.getId()).description(source.getDescription())
+                .id(new ObjectId(source.getId())).description(source.getDescription())
                 .prepTime(source.getPrepTime()).cookTime(source.getCookTime())
                 .servings(source.getServings()).source(source.getSource())
                 .url(source.getUrl()).directions(source.getDirections())

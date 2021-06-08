@@ -32,7 +32,7 @@ class UnitOfMeasureServiceImplTest {
     @Test
     void listAll() {
 
-        when(unitOfMeasureRepository.findAll()).thenReturn(List.of(UnitOfMeasure.builder().id(1L).build(), UnitOfMeasure.builder().id(2L).build()));
+        when(unitOfMeasureRepository.findAll()).thenReturn(List.of(UnitOfMeasure.builder().id("1").build(), UnitOfMeasure.builder().id("2").build()));
 
         List<UnitOfMeasureCommand> unitOfMeasureCommands = unitOfMeasureService.listAll();
 

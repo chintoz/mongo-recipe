@@ -23,10 +23,10 @@ class NotesCommandToNotesTest {
 
     @Test
     void convert() {
-        Notes notes = converter.convert(NotesCommand.builder().id(1L).recipeNotes("Notes").build());
+        Notes notes = converter.convert(NotesCommand.builder().id("1").recipeNotes("Notes").build());
 
         assertNotNull(notes);
-        assertEquals(1L, notes.getId());
+        assertEquals("1", notes.getId());
         assertEquals("Notes", notes.getRecipeNotes());
     }
 }

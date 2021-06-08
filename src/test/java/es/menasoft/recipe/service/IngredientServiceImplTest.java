@@ -11,6 +11,7 @@ import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.domain.UnitOfMeasure;
 import es.menasoft.recipe.repository.RecipeRepository;
 import es.menasoft.recipe.repository.UnitOfMeasureRepository;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -33,6 +34,8 @@ class IngredientServiceImplTest {
 
     IngredientService ingredientService;
 
+    ObjectId firstRecipeId = new ObjectId();
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -44,59 +47,59 @@ class IngredientServiceImplTest {
     @Test
     void findByRecipeIdAndIngredientId() {
 
-        Recipe recipe = Recipe.builder().id(1L).build();
-        recipe.setIngredients(Set.of(Ingredient.builder().id(1L).recipe(recipe).build()));
-        when(recipeRepository.findById(eq(1L))).thenReturn(Optional.of(recipe));
+        Recipe recipe = Recipe.builder().id(firstRecipeId).build();
+        recipe.setIngredients(Set.of(Ingredient.builder().id("1").recipe(recipe).build()));
+        when(recipeRepository.findById(eq(firstRecipeId))).thenReturn(Optional.of(recipe));
 
-        IngredientCommand ingredient = ingredientService.findByRecipeIdAndIngredientId(1L, 1L);
+        IngredientCommand ingredient = ingredientService.findByRecipeIdAndIngredientId(firstRecipeId.toString(), "1");
 
         assertNotNull(ingredient);
-        assertEquals(1L, ingredient.getId());
-        assertEquals(1L, ingredient.getRecipeId());
-        verify(recipeRepository, times(1)).findById(eq(1L));
+        assertEquals("1", ingredient.getId());
+        assertEquals(firstRecipeId.toString(), ingredient.getRecipeId());
+        verify(recipeRepository, times(1)).findById(eq(firstRecipeId));
     }
 
     @Test
     void findByRecipeIdAndIngredientIdNotFound() {
 
-        Recipe recipe = Recipe.builder().id(1L).build();
-        when(recipeRepository.findById(eq(1L))).thenReturn(Optional.of(recipe));
+        Recipe recipe = Recipe.builder().id(firstRecipeId).build();
+        when(recipeRepository.findById(eq(firstRecipeId))).thenReturn(Optional.of(recipe));
 
-        assertThrows(RuntimeException.class,  () -> ingredientService.findByRecipeIdAndIngredientId(1L, 1L));
+        assertThrows(RuntimeException.class,  () -> ingredientService.findByRecipeIdAndIngredientId(firstRecipeId.toString(), "1"));
 
-        verify(recipeRepository, times(1)).findById(eq(1L));
+        verify(recipeRepository, times(1)).findById(eq(firstRecipeId));
     }
 
 
     @Test
     void saveIngredientCommand() {
-        Recipe recipe = Recipe.builder().id(1L)
-                .ingredients(Set.of(Ingredient.builder().id(1L).uom(UnitOfMeasure.builder().id(1L).build()).build())).build();
-        when(recipeRepository.findById(eq(1L))).thenReturn(Optional.of(recipe));
+        Recipe recipe = Recipe.builder().id(firstRecipeId)
+                .ingredients(Set.of(Ingredient.builder().id("1").uom(UnitOfMeasure.builder().id("1").build()).build())).build();
+        when(recipeRepository.findById(eq(firstRecipeId))).thenReturn(Optional.of(recipe));
         when(recipeRepository.save(any())).thenReturn(recipe);
-        when(unitOfMeasureRepository.findById(1L)).thenReturn(Optional.of(UnitOfMeasure.builder().id(1L).build()));
+        when(unitOfMeasureRepository.findById("1")).thenReturn(Optional.of(UnitOfMeasure.builder().id("1").build()));
 
         IngredientCommand ingredient = ingredientService.saveIngredientCommand(IngredientCommand.builder()
-                .id(1L).recipeId(1L).description("Description").unitOfMeasure(UnitOfMeasureCommand.builder().id(1L).build()).build());
+                .id("1").recipeId(firstRecipeId.toString()).description("Description").unitOfMeasure(UnitOfMeasureCommand.builder().id("1").build()).build());
 
         assertNotNull(ingredient);
-        verify(recipeRepository, times(1)).findById(eq(1L));
+        verify(recipeRepository, times(1)).findById(eq(firstRecipeId));
         verify(recipeRepository, times(1)).save(any());
-        verify(unitOfMeasureRepository, times(1)).findById(eq(1L));
+        verify(unitOfMeasureRepository, times(1)).findById(eq("1"));
 
     }
 
     @Test
     void deleteByRecipeIdAndIngredientId() {
         Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(Ingredient.builder().id(1L).uom(UnitOfMeasure.builder().id(1L).build()).build());
-        Recipe recipe = Recipe.builder().id(1L).ingredients(ingredients).build();
-        when(recipeRepository.findById(eq(1L))).thenReturn(Optional.of(recipe));
-        when(recipeRepository.save(any())).thenReturn( Recipe.builder().id(1L).build());
+        ingredients.add(Ingredient.builder().id("1").uom(UnitOfMeasure.builder().id("1").build()).build());
+        Recipe recipe = Recipe.builder().id(firstRecipeId).ingredients(ingredients).build();
+        when(recipeRepository.findById(eq(firstRecipeId))).thenReturn(Optional.of(recipe));
+        when(recipeRepository.save(any())).thenReturn( Recipe.builder().id(firstRecipeId).build());
 
-        ingredientService.deleteByRecipeIdAndIngredientId(1L, 1L);
+        ingredientService.deleteByRecipeIdAndIngredientId(firstRecipeId.toString(), "1");
 
-        verify(recipeRepository, times(1)).findById(eq(1L));
+        verify(recipeRepository, times(1)).findById(eq(firstRecipeId));
         verify(recipeRepository, times(1)).save(any());
     }
 }

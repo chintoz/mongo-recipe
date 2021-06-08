@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Slf4j
@@ -20,11 +20,10 @@ public class ImageServiceImpl implements ImageService {
     private final RecipeRepository recipeRepository;
 
     @Override
-    @Transactional
     @SneakyThrows
-    public void saveImageFile(Long recipeId, MultipartFile file) {
+    public void saveImageFile(String recipeId, MultipartFile file) {
 
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        Optional<Recipe> recipeOptional = recipeRepository.findById(new ObjectId(recipeId));
 
         if (recipeOptional.isEmpty()) {
             throw new RuntimeException("Recipe not found");

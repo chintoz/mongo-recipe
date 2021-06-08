@@ -6,6 +6,7 @@ import es.menasoft.recipe.service.ImageService;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.ArrayUtils;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -34,6 +35,8 @@ class ImageControllerTest {
 
     MockMvc mockMvc;
 
+    ObjectId firstRecipeId = new ObjectId();
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -45,26 +48,14 @@ class ImageControllerTest {
     void loadImageForm() {
 
         mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
-        when(recipeService.findCommandById(eq(1L))).thenReturn(RecipeCommand.builder().id(1L).build());
+        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(RecipeCommand.builder().id(firstRecipeId.toString()).build());
 
-        mockMvc.perform(get("/recipe/1/image"))
+        mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/image"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/imageuploadform"))
                 .andExpect(model().attributeExists("recipe"));
 
-        verify(recipeService, times(1)).findCommandById(eq(1L));
-    }
-
-    @Test
-    @SneakyThrows
-    void loadImageFormNotNumber() {
-        mockMvc = MockMvcBuilders.standaloneSetup(imageController)
-                .setControllerAdvice(new ControllerExceptionHandler())
-                .build();
-
-        mockMvc.perform(get("/recipe/asd/image"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
+        verify(recipeService, times(1)).findCommandById(eq(firstRecipeId.toString()));
     }
 
     @Test
@@ -74,11 +65,11 @@ class ImageControllerTest {
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "testing.txt", "text/plain",
                 "Recipe App TXT content".getBytes());
 
-        mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
+        mockMvc.perform(multipart("/recipe/" + firstRecipeId.toString() + "/image").file(multipartFile))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/recipe/1/show"));
+                .andExpect(header().string("Location", "/recipe/" + firstRecipeId.toString() + "/show"));
 
-        verify(imageService, times(1)).saveImageFile(eq(1L), any());
+        verify(imageService, times(1)).saveImageFile(eq(firstRecipeId.toString()), any());
     }
 
     @Test
@@ -86,10 +77,10 @@ class ImageControllerTest {
     public void renderImageFromDb() {
         mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
         byte[] content = "fake Image Test".getBytes();
-        when(recipeService.findCommandById(eq(1L))).thenReturn(RecipeCommand.builder().id(1L)
+        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(RecipeCommand.builder().id(firstRecipeId.toString())
                 .image(ArrayUtils.toObject(content)).build());
 
-        MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
+        MockHttpServletResponse response = mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/recipeimage"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 

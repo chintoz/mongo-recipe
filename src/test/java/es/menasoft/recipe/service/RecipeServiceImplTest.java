@@ -5,6 +5,7 @@ import es.menasoft.recipe.converters.*;
 import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.exception.NotFoundException;
 import es.menasoft.recipe.repository.RecipeRepository;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -23,6 +24,8 @@ class RecipeServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;
+
+    ObjectId firstRecipeId = new ObjectId();
 
     @BeforeEach
     void setUp() {
@@ -51,34 +54,34 @@ class RecipeServiceImplTest {
     @Test
     void findByExistingId() {
 
-        when(recipeRepository.findById(1L)).thenReturn(Optional.of(Recipe.builder().id(1L).build()));
+        when(recipeRepository.findById(firstRecipeId)).thenReturn(Optional.of(Recipe.builder().id(firstRecipeId).build()));
 
-        Recipe recipe = recipeService.findById(1L);
+        Recipe recipe = recipeService.findById(firstRecipeId.toString());
 
         assertNotNull(recipe);
-        assertEquals(1, recipe.getId());
-        verify(recipeRepository).findById(eq(1L));
+        assertEquals(firstRecipeId, recipe.getId());
+        verify(recipeRepository).findById(eq(firstRecipeId));
 
     }
 
     @Test
     void findByNotExistingId() {
 
-        when(recipeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(recipeRepository.findById(firstRecipeId)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> recipeService.findById(1L));
-        verify(recipeRepository).findById(eq(1L));
+        assertThrows(RuntimeException.class, () -> recipeService.findById(firstRecipeId.toString()));
+        verify(recipeRepository).findById(eq(firstRecipeId));
 
     }
 
     @Test
     void saveRecipeCommand() {
-        when(recipeRepository.save(any())).thenReturn(Recipe.builder().id(1L).build());
+        when(recipeRepository.save(any())).thenReturn(Recipe.builder().id(firstRecipeId).build());
 
-        RecipeCommand command = recipeService.saveRecipeCommand(RecipeCommand.builder().id(1L).build());
+        RecipeCommand command = recipeService.saveRecipeCommand(RecipeCommand.builder().id(firstRecipeId.toString()).build());
 
         assertNotNull(command);
-        assertEquals(1L, command.getId());
+        assertEquals(firstRecipeId.toString(), command.getId());
         verify(recipeRepository, times(1)).save(any());
 
     }
@@ -86,29 +89,29 @@ class RecipeServiceImplTest {
     @Test
     void findCommandByExistingId() {
 
-        when(recipeRepository.findById(1L)).thenReturn(Optional.of(Recipe.builder().id(1L).build()));
+        when(recipeRepository.findById(firstRecipeId)).thenReturn(Optional.of(Recipe.builder().id(firstRecipeId).build()));
 
-        RecipeCommand command = recipeService.findCommandById(1L);
+        RecipeCommand command = recipeService.findCommandById(firstRecipeId.toString());
 
         assertNotNull(command);
-        assertEquals(1L, command.getId());
-        verify(recipeRepository, times(1)).findById(1L);
+        assertEquals(firstRecipeId.toString(), command.getId());
+        verify(recipeRepository, times(1)).findById(firstRecipeId);
 
     }
 
     @Test
     void findCommandByNotExistingId() {
 
-        when(recipeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(recipeRepository.findById(firstRecipeId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> recipeService.findCommandById(1L));
-        verify(recipeRepository, times(1)).findById(1L);
+        assertThrows(NotFoundException.class, () -> recipeService.findCommandById(firstRecipeId.toString()));
+        verify(recipeRepository, times(1)).findById(firstRecipeId);
 
     }
 
     @Test
     void deleteById() {
-        recipeService.deleteById(1L);
-        verify(recipeRepository,times(1)).deleteById(eq(1L));
+        recipeService.deleteById(firstRecipeId.toString());
+        verify(recipeRepository,times(1)).deleteById(eq(firstRecipeId));
     }
 }

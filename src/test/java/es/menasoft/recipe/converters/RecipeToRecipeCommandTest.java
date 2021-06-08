@@ -3,6 +3,7 @@ package es.menasoft.recipe.converters;
 import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.domain.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,9 +28,9 @@ class RecipeToRecipeCommandTest {
 
     @Test
     void convert() {
-
+        ObjectId recipeId = new ObjectId();
         RecipeCommand recipeCommand = converter.convert(Recipe.builder()
-                .id(1L).description("Description").prepTime(1).cookTime(1)
+                .id(recipeId).description("Description").prepTime(1).cookTime(1)
                 .servings(1).source("Source").url("URL").difficulty(Difficulty.EASY)
                 .directions("Directions")
                 .notes(Notes.builder().build())
@@ -39,7 +40,7 @@ class RecipeToRecipeCommandTest {
                 .build());
 
         assertNotNull(recipeCommand);
-        assertEquals(1L, recipeCommand.getId());
+        assertEquals(recipeId.toString(), recipeCommand.getId());
         assertEquals("Description", recipeCommand.getDescription());
         assertEquals(1, recipeCommand.getPrepTime());
         assertEquals(1, recipeCommand.getCookTime());

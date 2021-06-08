@@ -1,27 +1,18 @@
 package es.menasoft.recipe.domain;
 
-import lombok.*;
-
-import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notes {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-
-    @OneToOne
-    @EqualsAndHashCode.Exclude
+    private String id;
     private Recipe recipe;
-
-    @Lob
     private String recipeNotes;
 
 }

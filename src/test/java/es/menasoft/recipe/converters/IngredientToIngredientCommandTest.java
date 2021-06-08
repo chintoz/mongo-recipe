@@ -25,11 +25,11 @@ class IngredientToIngredientCommandTest {
 
     @Test
     void convert() {
-        IngredientCommand ingredientCommand = converter.convert(Ingredient.builder().id(1L)
+        IngredientCommand ingredientCommand = converter.convert(Ingredient.builder().id("1")
                 .description("Description").amount(BigDecimal.ONE).build());
 
         assertNotNull(ingredientCommand);
-        assertEquals(1L, ingredientCommand.getId());
+        assertEquals("1", ingredientCommand.getId());
         assertEquals("Description", ingredientCommand.getDescription());
         assertEquals(BigDecimal.ONE, ingredientCommand.getAmount());
 

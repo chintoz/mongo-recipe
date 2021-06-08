@@ -6,6 +6,7 @@ import es.menasoft.recipe.commands.NotesCommand;
 import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.domain.Difficulty;
 import es.menasoft.recipe.domain.Recipe;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RecipeCommandToRecipeTest {
 
     RecipeCommandToRecipe converter;
+    ObjectId firstRecipeId = new ObjectId();
 
     @BeforeEach
     void setUp() {
@@ -32,7 +34,7 @@ class RecipeCommandToRecipeTest {
     void convert() {
 
         Recipe recipe = converter.convert(RecipeCommand.builder()
-                .id(1L).description("Description").prepTime(1).cookTime(1)
+                .id(firstRecipeId.toString()).description("Description").prepTime(1).cookTime(1)
                 .servings(1).source("Source").url("URL").difficulty(Difficulty.EASY)
                 .directions("Directions")
                 .notes(NotesCommand.builder().build())
@@ -41,7 +43,7 @@ class RecipeCommandToRecipeTest {
                 .build());
 
         assertNotNull(recipe);
-        assertEquals(1L, recipe.getId());
+        assertEquals(firstRecipeId, recipe.getId());
         assertEquals("Description", recipe.getDescription());
         assertEquals(1, recipe.getPrepTime());
         assertEquals(1, recipe.getCookTime());

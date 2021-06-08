@@ -38,7 +38,7 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
                 .collect(Collectors.toSet());
 
         return RecipeCommand.builder()
-                .id(source.getId()).description(source.getDescription())
+                .id(source.getId().toString()).description(source.getDescription())
                 .prepTime(source.getPrepTime()).cookTime(source.getCookTime())
                 .servings(source.getServings()).source(source.getSource())
                 .url(source.getUrl()).directions(source.getDirections())

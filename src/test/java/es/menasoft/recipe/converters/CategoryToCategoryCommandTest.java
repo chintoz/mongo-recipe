@@ -24,10 +24,10 @@ class CategoryToCategoryCommandTest {
     @Test
     void convert() {
         CategoryCommand categoryCommand = converter.convert(Category.builder()
-                .id(1L).description("Description").build());
+                .id("1").description("Description").build());
 
         assertNotNull(categoryCommand);
-        assertEquals(1L, categoryCommand.getId());
+        assertEquals("1", categoryCommand.getId());
         assertEquals("Description", categoryCommand.getDescription());
     }
 }

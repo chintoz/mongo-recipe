@@ -8,9 +8,9 @@ import es.menasoft.recipe.exception.NotFoundException;
 import es.menasoft.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,12 +33,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe findById(Long id) {
-        return recipeRepository.findById(id).orElseThrow(() -> new NotFoundException("Recipe not found for id value: " + id.toString()));
+    public Recipe findById(String id) {
+        return recipeRepository.findById(new ObjectId(id)).orElseThrow(() -> new NotFoundException("Recipe not found for id value: " + id.toString()));
     }
 
     @Override
-    @Transactional
     public RecipeCommand saveRecipeCommand(RecipeCommand command) {
         @SuppressWarnings("ConstantConditions") Recipe recipe = recipeRepository.save(recipeCommandToRecipe.convert(command));
         log.debug("Recipe saved with Id: " + recipe.getId());
@@ -46,13 +45,13 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeCommand findCommandById(Long id) {
-        Optional<Recipe> recipe = recipeRepository.findById(id);
+    public RecipeCommand findCommandById(String id) {
+        Optional<Recipe> recipe = recipeRepository.findById(new ObjectId(id));
         return recipe.map(recipeToRecipeCommand::convert).stream().findFirst().orElseThrow(() -> new NotFoundException("Recipe not found for id value: " + id.toString()));
     }
 
     @Override
-    public void deleteById(Long id) {
-        recipeRepository.deleteById(id);
+    public void deleteById(String id) {
+        recipeRepository.deleteById(new ObjectId(id));
     }
 }

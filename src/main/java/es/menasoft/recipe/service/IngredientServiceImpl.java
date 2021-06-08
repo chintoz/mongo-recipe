@@ -8,6 +8,7 @@ import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.repository.RecipeRepository;
 import es.menasoft.recipe.repository.UnitOfMeasureRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +26,8 @@ public class IngredientServiceImpl implements IngredientService {
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
     @Override
-    public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long id) {
-        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+    public IngredientCommand findByRecipeIdAndIngredientId(String recipeId, String id) {
+        Optional<Recipe> recipe = recipeRepository.findById(new ObjectId(recipeId));
 
         if (recipe.isEmpty()) {
             throw new RuntimeException("Recipe not found");
@@ -41,7 +42,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
 
-        Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
+        Optional<Recipe> recipeOptional = recipeRepository.findById(new ObjectId(ingredientCommand.getRecipeId()));
 
         if (recipeOptional.isEmpty()) {
             throw new RuntimeException("Recipe not found");
@@ -50,7 +51,7 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
                 .filter(i -> i.getId().equals(ingredientCommand.getId())).findFirst();
 
-        List<Long> existingIngredients;
+        List<String> existingIngredients;
 
         if (ingredientOptional.isPresent()) {
             existingIngredients = null;
@@ -76,8 +77,8 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void deleteByRecipeIdAndIngredientId(Long recipeId, Long id) {
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+    public void deleteByRecipeIdAndIngredientId(String recipeId, String id) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(new ObjectId(recipeId));
 
         if (recipeOptional.isEmpty()) {
             throw new RuntimeException("Recipe not found");
@@ -93,7 +94,7 @@ public class IngredientServiceImpl implements IngredientService {
         recipeRepository.save(recipe);
     }
 
-    private Ingredient findNewIngredient(List<Long> existingIngredients, Set<Ingredient> ingredients) {
+    private Ingredient findNewIngredient(List<String> existingIngredients, Set<Ingredient> ingredients) {
         return ingredients.stream()
                 .filter(ingredient -> !existingIngredients.contains(ingredient.getId()))
                 .findFirst().orElseThrow(() -> new RuntimeException("Ingredient created not found"));

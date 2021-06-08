@@ -28,13 +28,13 @@ public class ImageController {
 
     @GetMapping("/recipe/{recipeId}/image")
     public String loadImageForm(@PathVariable String recipeId, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(Long.parseLong(recipeId)));
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         return "recipe/imageuploadform";
     }
 
     @PostMapping("/recipe/{recipeId}/image")
     public String handleImagePost(@PathVariable String recipeId, @RequestParam("imagefile") MultipartFile file) {
-        imageService.saveImageFile(Long.parseLong(recipeId), file);
+        imageService.saveImageFile(recipeId, file);
         return "redirect:/recipe/" + recipeId + "/show";
     }
 
@@ -42,7 +42,7 @@ public class ImageController {
     @SneakyThrows
     public void renderImageFromDb(@PathVariable String recipeId, HttpServletResponse response) {
 
-        RecipeCommand command = recipeService.findCommandById(Long.parseLong(recipeId));
+        RecipeCommand command = recipeService.findCommandById(recipeId);
 
         if (command.getImage() == null) {
             return;

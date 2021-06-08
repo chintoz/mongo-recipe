@@ -24,11 +24,11 @@ class UnitOfMeasureCommandToUnitOfMeasureTest {
     @Test
     void convert() {
 
-        UnitOfMeasure unitOfMeasure = converter.convert(UnitOfMeasureCommand.builder().id(1L)
+        UnitOfMeasure unitOfMeasure = converter.convert(UnitOfMeasureCommand.builder().id("1")
                 .description("Description").build());
 
         assertNotNull(unitOfMeasure);
-        assertEquals(1L, unitOfMeasure.getId());
+        assertEquals("1", unitOfMeasure.getId());
         assertEquals("Description", unitOfMeasure.getDescription());
 
     }
