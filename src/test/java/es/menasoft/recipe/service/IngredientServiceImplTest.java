@@ -48,14 +48,13 @@ class IngredientServiceImplTest {
     void findByRecipeIdAndIngredientId() {
 
         Recipe recipe = Recipe.builder().id(firstRecipeId).build();
-        recipe.setIngredients(Set.of(Ingredient.builder().id("1").recipe(recipe).build()));
+        recipe.setIngredients(Set.of(Ingredient.builder().id("1").build()));
         when(recipeRepository.findById(eq(firstRecipeId))).thenReturn(Optional.of(recipe));
 
         IngredientCommand ingredient = ingredientService.findByRecipeIdAndIngredientId(firstRecipeId.toString(), "1");
 
         assertNotNull(ingredient);
         assertEquals("1", ingredient.getId());
-        assertEquals(firstRecipeId.toString(), ingredient.getRecipeId());
         verify(recipeRepository, times(1)).findById(eq(firstRecipeId));
     }
 

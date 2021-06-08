@@ -40,7 +40,7 @@ class RecipeServiceImplTest {
     @Test
     void findAll() {
         // given
-        when(recipeRepository.findAll()).thenReturn(Set.of(Recipe.builder().build()));
+        when(recipeRepository.findAll()).thenReturn(List.of(Recipe.builder().build()));
 
         // when
         List<Recipe> recipes = recipeService.findAll();

@@ -89,7 +89,6 @@ public class IngredientServiceImpl implements IngredientService {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Ingredient not found"));
 
-        ingredient.setRecipe(null);
         recipe.getIngredients().remove(ingredient);
         recipeRepository.save(recipe);
     }
