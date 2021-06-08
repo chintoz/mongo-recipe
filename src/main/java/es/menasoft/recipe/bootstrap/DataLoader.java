@@ -6,11 +6,9 @@ import es.menasoft.recipe.repository.RecipeRepository;
 import es.menasoft.recipe.repository.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.stream.StreamSupport;
 
 import static es.menasoft.recipe.domain.Difficulty.EASY;
 import static es.menasoft.recipe.domain.Difficulty.MODERATE;
@@ -21,7 +19,6 @@ import static java.util.stream.Collectors.toMap;
 
 @Component
 @Slf4j
-@Profile("default")
 public class DataLoader implements CommandLineRunner {
 
     private final RecipeRepository recipeRepository;
@@ -155,7 +152,7 @@ public class DataLoader implements CommandLineRunner {
         categoryRepository.save(cat4);
     }
 
-    private void loadUom(){
+    public void loadUom(){
         UnitOfMeasure uom1 = new UnitOfMeasure();
         uom1.setDescription("Teaspoon");
         unitOfMeasureRepository.save(uom1);

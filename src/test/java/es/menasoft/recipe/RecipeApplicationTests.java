@@ -1,10 +1,8 @@
 package es.menasoft.recipe;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class RecipeApplicationTests {
+class RecipeApplicationTests extends BaseTestIT{
 
     @Test
     void contextLoads() {

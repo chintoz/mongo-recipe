@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Ingredient {
 
+    @Builder.Default
     private String id = UUID.randomUUID().toString();
     private String description;
     private BigDecimal amount;

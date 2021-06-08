@@ -40,7 +40,8 @@ test {
     useJUnitPlatform()
     filter {
         includeTestsMatching '*Test'
-        excludeTestsMatching '*IT'
+        includeTestsMatching '*IT'
+        includeTestsMatching '*Tests'
     }
     finalizedBy jacocoTestReport
 }
