@@ -5,6 +5,11 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = '0.8.7'
 }
 
 repositories {
@@ -55,5 +60,13 @@ tasks.test {
     filter {
         includeTestsMatching '*Test'
         excludeTestsMatching '*IT'
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
     }
 }
