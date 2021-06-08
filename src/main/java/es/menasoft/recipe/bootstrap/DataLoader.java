@@ -1,17 +1,23 @@
 package es.menasoft.recipe.bootstrap;
 
-import es.menasoft.recipe.domain.Ingredient;
-import es.menasoft.recipe.domain.Notes;
-import es.menasoft.recipe.domain.Recipe;
+import es.menasoft.recipe.domain.*;
+import es.menasoft.recipe.repository.CategoryRepository;
 import es.menasoft.recipe.repository.RecipeRepository;
+import es.menasoft.recipe.repository.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+import java.util.stream.StreamSupport;
+
 import static es.menasoft.recipe.domain.Difficulty.EASY;
 import static es.menasoft.recipe.domain.Difficulty.MODERATE;
 import static java.math.BigDecimal.valueOf;
+import static java.util.Set.of;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 @Component
 @Slf4j
@@ -19,13 +25,23 @@ import static java.math.BigDecimal.valueOf;
 public class DataLoader implements CommandLineRunner {
 
     private final RecipeRepository recipeRepository;
+    private final CategoryRepository categoryRepository;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public DataLoader(RecipeRepository recipeRepository) {
+    public DataLoader(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.recipeRepository = recipeRepository;
+        this.categoryRepository = categoryRepository;
+        this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
     @Override
     public void run(String... args) {
+
+        // Metadata
+        loadCategories();
+        loadUom();
+        Map<String, UnitOfMeasure> unitOfMeasureMap = unitOfMeasures();
+        Map<String, Category> categoryMap = categories();
 
         // Spicy Grilled Chicken Tacos
         Recipe tacosRecipe = new Recipe();
@@ -62,11 +78,13 @@ public class DataLoader implements CommandLineRunner {
 
         tacosRecipe.setNotes(tacosNotes);
 
-        tacosRecipe.addingIngredient(new Ingredient(valueOf(2), "ancho chilli powder", null))
-                .addingIngredient(new Ingredient(valueOf(1), "dried oregano", null))
-                .addingIngredient(new Ingredient(valueOf(1), "dried cumin", null))
-                .addingIngredient(new Ingredient(valueOf(1), "sugar", null))
-                .addingIngredient(new Ingredient(valueOf((double) 1 / 2), "salt", null));
+        tacosRecipe.setCategories(of(categoryMap.get("Mexican")));
+
+        tacosRecipe.addingIngredient(new Ingredient(valueOf(2), "ancho chilli powder", unitOfMeasureMap.get("Tablespoon")))
+                .addingIngredient(new Ingredient(valueOf(1), "dried oregano", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(valueOf(1), "dried cumin", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(valueOf(1), "sugar", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(valueOf((double) 1 / 2), "salt", unitOfMeasureMap.get("Teaspoon")));
 
         recipeRepository.save(tacosRecipe);
 
@@ -105,16 +123,81 @@ public class DataLoader implements CommandLineRunner {
                 Read more: http://www.simplyrecipes.com/recipes/perfect_guacamole/#ixzz4jvoun5ws""");
         guacamoleRecipe.setNotes(guacamoleNotes);
 
-        guacamoleRecipe.addingIngredient(new Ingredient(valueOf(2), "ripe avocados", null))
-                .addingIngredient(new Ingredient(valueOf((double) 1 / 4), "salt", null))
-                .addingIngredient(new Ingredient(valueOf(1), "fresh lime juice", null))
-                .addingIngredient(new Ingredient(valueOf(2), "cilantro", null))
-                .addingIngredient(new Ingredient(valueOf(1), "freshly grated black pepper", null));
+        guacamoleRecipe.setCategories(of(categoryMap.get("Mexican"), categoryMap.get("Fast Food")));
+
+        guacamoleRecipe.addingIngredient(new Ingredient(valueOf(2), "ripe avocados", unitOfMeasureMap.get("Each")))
+                .addingIngredient(new Ingredient(valueOf((double) 1 / 4), "salt", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(valueOf(1), "fresh lime juice", unitOfMeasureMap.get("Tablespoon")))
+                .addingIngredient(new Ingredient(valueOf(2), "cilantro", unitOfMeasureMap.get("Tablespoon")))
+                .addingIngredient(new Ingredient(valueOf(1), "freshly grated black pepper", unitOfMeasureMap.get("Dash")));
 
         recipeRepository.save(guacamoleRecipe);
 
         log.info("Saved Guacamole Recipe");
 
+    }
+
+    private void loadCategories(){
+        Category cat1 = new Category();
+        cat1.setDescription("American");
+        categoryRepository.save(cat1);
+
+        Category cat2 = new Category();
+        cat2.setDescription("Italian");
+        categoryRepository.save(cat2);
+
+        Category cat3 = new Category();
+        cat3.setDescription("Mexican");
+        categoryRepository.save(cat3);
+
+        Category cat4 = new Category();
+        cat4.setDescription("Fast Food");
+        categoryRepository.save(cat4);
+    }
+
+    private void loadUom(){
+        UnitOfMeasure uom1 = new UnitOfMeasure();
+        uom1.setDescription("Teaspoon");
+        unitOfMeasureRepository.save(uom1);
+
+        UnitOfMeasure uom2 = new UnitOfMeasure();
+        uom2.setDescription("Tablespoon");
+        unitOfMeasureRepository.save(uom2);
+
+        UnitOfMeasure uom3 = new UnitOfMeasure();
+        uom3.setDescription("Cup");
+        unitOfMeasureRepository.save(uom3);
+
+        UnitOfMeasure uom4 = new UnitOfMeasure();
+        uom4.setDescription("Pinch");
+        unitOfMeasureRepository.save(uom4);
+
+        UnitOfMeasure uom5 = new UnitOfMeasure();
+        uom5.setDescription("Ounce");
+        unitOfMeasureRepository.save(uom5);
+
+        UnitOfMeasure uom6 = new UnitOfMeasure();
+        uom6.setDescription("Each");
+        unitOfMeasureRepository.save(uom6);
+
+        UnitOfMeasure uom7 = new UnitOfMeasure();
+        uom7.setDescription("Pint");
+        unitOfMeasureRepository.save(uom7);
+
+        UnitOfMeasure uom8 = new UnitOfMeasure();
+        uom8.setDescription("Dash");
+        unitOfMeasureRepository.save(uom8);
+    }
+
+
+    private Map<String, UnitOfMeasure> unitOfMeasures() {
+        return unitOfMeasureRepository.findAll().stream()
+                .collect(toMap(UnitOfMeasure::getDescription, identity()));
+    }
+
+    private Map<String, Category> categories() {
+        return categoryRepository.findAll().stream()
+                .collect(toMap(Category::getDescription, identity()));
     }
 
 }
