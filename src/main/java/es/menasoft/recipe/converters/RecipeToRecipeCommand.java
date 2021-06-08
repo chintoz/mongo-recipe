@@ -10,6 +10,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,8 +45,8 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
                 .url(source.getUrl()).directions(source.getDirections())
                 .difficulty(source.getDifficulty())
                 .notes(notesToNotesCommand.convert(source.getNotes()))
-                .ingredients(ingredientCommands)
-                .categories(categoryCommands)
+                .ingredients(new ArrayList<>(ingredientCommands))
+                .categories(new ArrayList<>(categoryCommands))
                 .image(source.getImage())
                 .build();
     }

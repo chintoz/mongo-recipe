@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ public class IngredientServiceImpl implements IngredientService {
         return recipe.get().getIngredients().stream()
                 .filter(i -> i.getId().equals(id))
                 .map(ingredientToIngredientCommand::convert)
+                .filter(Objects::nonNull)
+                .peek(ingredientCommand -> ingredientCommand.setRecipeId(recipeId))
                 .findFirst().orElseThrow(() -> new RuntimeException("Ingredient not found"));
     }
 

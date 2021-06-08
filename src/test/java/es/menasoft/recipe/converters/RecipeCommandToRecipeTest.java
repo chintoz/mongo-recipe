@@ -10,7 +10,7 @@ import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,8 +38,8 @@ class RecipeCommandToRecipeTest {
                 .servings(1).source("Source").url("URL").difficulty(Difficulty.EASY)
                 .directions("Directions")
                 .notes(NotesCommand.builder().build())
-                .categories(Set.of(CategoryCommand.builder().build()))
-                .ingredients(Set.of(IngredientCommand.builder().build()))
+                .categories(List.of(CategoryCommand.builder().build()))
+                .ingredients(List.of(IngredientCommand.builder().build()))
                 .build());
 
         assertNotNull(recipe);
