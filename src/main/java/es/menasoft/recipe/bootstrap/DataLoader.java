@@ -4,6 +4,10 @@ import es.menasoft.recipe.domain.*;
 import es.menasoft.recipe.repository.CategoryRepository;
 import es.menasoft.recipe.repository.RecipeRepository;
 import es.menasoft.recipe.repository.UnitOfMeasureRepository;
+import es.menasoft.recipe.repository.reactive.CategoryReactiveRepository;
+import es.menasoft.recipe.repository.reactive.RecipeReactiveRepository;
+import es.menasoft.recipe.repository.reactive.UnitOfMeasureReactiveRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -19,20 +23,29 @@ import static java.util.stream.Collectors.toMap;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
     private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public DataLoader(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.recipeRepository = recipeRepository;
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
-    }
+    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+    private final CategoryReactiveRepository categoryReactiveRepository;
+    private final RecipeReactiveRepository recipeReactiveRepository;
+
 
     @Override
     public void run(String... args) {
+
+        Long uoms = unitOfMeasureReactiveRepository.count().block();
+        Long categories = categoryReactiveRepository.count().block();
+        Long recipes = recipeReactiveRepository.count().block();
+
+        if (uoms > 0  || categories > 0 || recipes > 0) {
+            log.warn("Data already loaded");
+            return;
+        }
 
         // Metadata
         loadCategories();

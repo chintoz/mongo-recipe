@@ -22,9 +22,8 @@ class UnitOfMeasureRepositoryIT extends BaseTestIT {
 
     @BeforeEach
     void setUp() {
-        if (unitOfMeasureRepository.count() == 0) {
-            dataLoader.loadUom();
-        }
+        unitOfMeasureRepository.deleteAll();
+        dataLoader.loadUom();
     }
 
     @Test

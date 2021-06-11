@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Notes {
 
+    @Builder.Default
     private String id = UUID.randomUUID().toString();
     private String recipeNotes;
 
