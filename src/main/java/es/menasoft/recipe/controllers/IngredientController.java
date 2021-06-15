@@ -33,14 +33,16 @@ public class IngredientController {
     @GetMapping("/recipe/{recipeId}/ingredient/{id}/show")
     public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
         model.addAttribute("ingredient", ingredientService
-                .findByRecipeIdAndIngredientId(recipeId, id));
+                .findByRecipeIdAndIngredientId(recipeId, id).block());
         return "recipe/ingredient/show";
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/{id}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
-        model.addAttribute("uomList", unitOfMeasureService.listAll());
+        IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block();
+        ingredientCommand.setRecipeId(recipeId);
+        model.addAttribute("ingredient", ingredientCommand);
+        model.addAttribute("uomList", unitOfMeasureService.listAll().collectList().block());
         return "recipe/ingredient/ingredientform";
     }
 
@@ -49,7 +51,7 @@ public class IngredientController {
         model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         model.addAttribute("ingredient", IngredientCommand.builder().recipeId(recipeId)
                 .unitOfMeasure(UnitOfMeasureCommand.builder().build()).build());
-        model.addAttribute("uomList", unitOfMeasureService.listAll());
+        model.addAttribute("uomList", unitOfMeasureService.listAll().collectList().block());
         return "recipe/ingredient/ingredientform";
     }
 
@@ -62,7 +64,7 @@ public class IngredientController {
     @PostMapping("recipe/{recipeId}/ingredient")
     public String saveOrUpdate(@PathVariable String recipeId, @ModelAttribute IngredientCommand command) {
         command.setRecipeId(recipeId);
-        IngredientCommand ingredient = ingredientService.saveIngredientCommand(command);
+        IngredientCommand ingredient = ingredientService.saveIngredientCommand(command).block();
 
         log.debug("Saved recipe id: {}", ingredient.getRecipeId());
         log.debug("Saved ingredient id: {}", ingredient.getId());

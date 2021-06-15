@@ -13,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static es.menasoft.recipe.domain.Difficulty.EASY;
 import static es.menasoft.recipe.domain.Difficulty.MODERATE;
@@ -90,11 +91,11 @@ public class DataLoader implements CommandLineRunner {
 
         tacosRecipe.setCategories(of(categoryMap.get("Mexican")));
 
-        tacosRecipe.addingIngredient(new Ingredient(valueOf(2), "ancho chilli powder", unitOfMeasureMap.get("Tablespoon")))
-                .addingIngredient(new Ingredient(valueOf(1), "dried oregano", unitOfMeasureMap.get("Teaspoon")))
-                .addingIngredient(new Ingredient(valueOf(1), "dried cumin", unitOfMeasureMap.get("Teaspoon")))
-                .addingIngredient(new Ingredient(valueOf(1), "sugar", unitOfMeasureMap.get("Teaspoon")))
-                .addingIngredient(new Ingredient(valueOf((double) 1 / 2), "salt", unitOfMeasureMap.get("Teaspoon")));
+        tacosRecipe.addingIngredient(new Ingredient(UUID.randomUUID().toString(),valueOf(2), "ancho chilli powder", unitOfMeasureMap.get("Tablespoon")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf(1), "dried oregano", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf(1), "dried cumin", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf(1), "sugar", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf((double) 1 / 2), "salt", unitOfMeasureMap.get("Teaspoon")));
 
         recipeRepository.save(tacosRecipe);
 
@@ -135,11 +136,11 @@ public class DataLoader implements CommandLineRunner {
 
         guacamoleRecipe.setCategories(of(categoryMap.get("Mexican"), categoryMap.get("Fast Food")));
 
-        guacamoleRecipe.addingIngredient(new Ingredient(valueOf(2), "ripe avocados", unitOfMeasureMap.get("Each")))
-                .addingIngredient(new Ingredient(valueOf((double) 1 / 4), "salt", unitOfMeasureMap.get("Teaspoon")))
-                .addingIngredient(new Ingredient(valueOf(1), "fresh lime juice", unitOfMeasureMap.get("Tablespoon")))
-                .addingIngredient(new Ingredient(valueOf(2), "cilantro", unitOfMeasureMap.get("Tablespoon")))
-                .addingIngredient(new Ingredient(valueOf(1), "freshly grated black pepper", unitOfMeasureMap.get("Dash")));
+        guacamoleRecipe.addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf(2), "ripe avocados", unitOfMeasureMap.get("Each")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf((double) 1 / 4), "salt", unitOfMeasureMap.get("Teaspoon")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf(1), "fresh lime juice", unitOfMeasureMap.get("Tablespoon")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf(2), "cilantro", unitOfMeasureMap.get("Tablespoon")))
+                .addingIngredient(new Ingredient(UUID.randomUUID().toString(), valueOf(1), "freshly grated black pepper", unitOfMeasureMap.get("Dash")));
 
         recipeRepository.save(guacamoleRecipe);
 

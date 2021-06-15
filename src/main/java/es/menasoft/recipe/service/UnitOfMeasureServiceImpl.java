@@ -2,26 +2,20 @@ package es.menasoft.recipe.service;
 
 import es.menasoft.recipe.commands.UnitOfMeasureCommand;
 import es.menasoft.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
-import es.menasoft.recipe.repository.UnitOfMeasureRepository;
+import es.menasoft.recipe.repository.reactive.UnitOfMeasureReactiveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toList;
+import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
 
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
     private final UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
 
     @Override
-    public List<UnitOfMeasureCommand> listAll() {
-        return StreamSupport.stream(unitOfMeasureRepository.findAll().spliterator(), false)
-                .map(unitOfMeasureToUnitOfMeasureCommand::convert)
-                .collect(toList());
+    public Flux<UnitOfMeasureCommand> listAll() {
+        return unitOfMeasureReactiveRepository.findAll().map(unitOfMeasureToUnitOfMeasureCommand::convert);
     }
 }

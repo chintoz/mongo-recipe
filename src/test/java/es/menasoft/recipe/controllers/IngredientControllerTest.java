@@ -15,8 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -68,7 +68,7 @@ class IngredientControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
         when(ingredientService.findByRecipeIdAndIngredientId(eq(firstRecipeId.toString()), eq("1")))
-                .thenReturn(IngredientCommand.builder().id("1").recipeId(firstRecipeId.toString()).build());
+                .thenReturn(Mono.just(IngredientCommand.builder().id("1").recipeId(firstRecipeId.toString()).build()));
 
         mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/ingredient/1/show"))
                 .andExpect(status().isOk())
@@ -85,9 +85,9 @@ class IngredientControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
         when(ingredientService.findByRecipeIdAndIngredientId(eq(firstRecipeId.toString()), eq("1")))
-                .thenReturn(IngredientCommand.builder().id("1").recipeId(firstRecipeId.toString()).build());
+                .thenReturn(Mono.just(IngredientCommand.builder().id("1").recipeId(firstRecipeId.toString()).build()));
 
-        when(unitOfMeasureService.listAll()).thenReturn(List.of(UnitOfMeasureCommand.builder().build()));
+        when(unitOfMeasureService.listAll()).thenReturn(Flux.just(UnitOfMeasureCommand.builder().build()));
 
         mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/ingredient/1/update"))
                 .andExpect(status().isOk())
@@ -108,7 +108,7 @@ class IngredientControllerTest {
         when(recipeService.findCommandById(eq(firstRecipeId.toString())))
                 .thenReturn(RecipeCommand.builder().id(firstRecipeId.toString()).build());
 
-        when(unitOfMeasureService.listAll()).thenReturn(List.of(UnitOfMeasureCommand.builder().build()));
+        when(unitOfMeasureService.listAll()).thenReturn(Flux.just(UnitOfMeasureCommand.builder().build()));
 
         mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/ingredient/new"))
                 .andExpect(status().isOk())
@@ -126,7 +126,7 @@ class IngredientControllerTest {
     void saveOrUpdate() {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
-        when(ingredientService.saveIngredientCommand(any())).thenReturn(IngredientCommand.builder().recipeId(firstRecipeId.toString()).id("1").build());
+        when(ingredientService.saveIngredientCommand(any())).thenReturn(Mono.just(IngredientCommand.builder().recipeId(firstRecipeId.toString()).id("1").build()));
 
         mockMvc.perform(post("/recipe/" + firstRecipeId.toString() + "/ingredient")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
