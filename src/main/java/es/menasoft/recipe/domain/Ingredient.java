@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -21,7 +20,5 @@ public class Ingredient {
     private String id = UUID.randomUUID().toString();
     private BigDecimal amount;
     private String description;
-
-    @DBRef
     private UnitOfMeasure uom;
 }
