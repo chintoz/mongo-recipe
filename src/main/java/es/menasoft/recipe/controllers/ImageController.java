@@ -5,7 +5,6 @@ import es.menasoft.recipe.service.ImageService;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -49,6 +48,6 @@ public class ImageController {
         }
 
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        IOUtils.copy(new ByteArrayInputStream(ArrayUtils.toPrimitive(command.getImage())), response.getOutputStream());
+        IOUtils.copy(new ByteArrayInputStream(command.getImage()), response.getOutputStream());
     }
 }

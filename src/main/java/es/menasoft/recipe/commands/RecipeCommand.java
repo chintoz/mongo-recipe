@@ -42,6 +42,6 @@ public class RecipeCommand {
     private NotesCommand notes;
     @Builder.Default
     private List<CategoryCommand> categories = new ArrayList<>();
-    private Byte[] image;
+    private byte[] image;
 
 }

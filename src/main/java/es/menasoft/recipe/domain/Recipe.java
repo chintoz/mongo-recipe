@@ -31,7 +31,7 @@ public class Recipe {
     private Difficulty difficulty;
     @Builder.Default
     private Set<Ingredient> ingredients = new HashSet<>();
-    private Byte[] image;
+    private byte[] image;
     private Notes notes;
 
     @Builder.Default

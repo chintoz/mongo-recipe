@@ -4,7 +4,6 @@ import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.service.ImageService;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ArrayUtils;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,7 +77,7 @@ class ImageControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
         byte[] content = "fake Image Test".getBytes();
         when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(Mono.just(RecipeCommand.builder().id(firstRecipeId.toString())
-                .image(ArrayUtils.toObject(content)).build()));
+                .image(content).build()));
 
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/recipeimage"))
                 .andExpect(status().isOk())
