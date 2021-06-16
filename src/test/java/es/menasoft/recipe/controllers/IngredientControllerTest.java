@@ -51,7 +51,7 @@ class IngredientControllerTest {
     void listIngredients() {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
-        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(RecipeCommand.builder().id(firstRecipeId.toString()).build());
+        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(Mono.just(RecipeCommand.builder().id(firstRecipeId.toString()).build()));
 
         mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/ingredients"))
                 .andExpect(status().isOk())
@@ -106,7 +106,7 @@ class IngredientControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
         when(recipeService.findCommandById(eq(firstRecipeId.toString())))
-                .thenReturn(RecipeCommand.builder().id(firstRecipeId.toString()).build());
+                .thenReturn(Mono.just(RecipeCommand.builder().id(firstRecipeId.toString()).build()));
 
         when(unitOfMeasureService.listAll()).thenReturn(Flux.just(UnitOfMeasureCommand.builder().build()));
 

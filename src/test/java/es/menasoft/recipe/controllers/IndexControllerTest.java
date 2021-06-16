@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -40,6 +41,9 @@ class IndexControllerTest {
     @Test
     void testMockMVC() throws Exception {
         // Given
+        List<Recipe> recipes = of(Recipe.builder().description("Recipe 1").build(),
+                Recipe.builder().description("Recipe 2").build());
+        when(recipeService.findAll()).thenReturn(Flux.fromIterable(recipes));
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
         // When / Then
@@ -54,7 +58,7 @@ class IndexControllerTest {
         // Given
         List<Recipe> recipes = of(Recipe.builder().description("Recipe 1").build(),
                 Recipe.builder().description("Recipe 2").build());
-        when(recipeService.findAll()).thenReturn(recipes);
+        when(recipeService.findAll()).thenReturn(Flux.fromIterable(recipes));
 
         ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 

@@ -28,7 +28,7 @@ public class ImageController {
 
     @GetMapping("/recipe/{recipeId}/image")
     public String loadImageForm(@PathVariable String recipeId, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
         return "recipe/imageuploadform";
     }
 
@@ -42,9 +42,9 @@ public class ImageController {
     @SneakyThrows
     public void renderImageFromDb(@PathVariable String recipeId, HttpServletResponse response) {
 
-        RecipeCommand command = recipeService.findCommandById(recipeId);
+        RecipeCommand command = recipeService.findCommandById(recipeId).block();
 
-        if (command.getImage() == null) {
+        if (command == null || command.getImage() == null) {
             return;
         }
 

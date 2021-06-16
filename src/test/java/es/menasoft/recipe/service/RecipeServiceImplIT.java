@@ -35,7 +35,7 @@ class RecipeServiceImplIT extends BaseTestIT {
 
         //when
         recipeCommand.setDescription("New Description");
-        RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
+        RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand).block();
 
         //then
         assertEquals("New Description", savedRecipeCommand.getDescription());

@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -42,7 +43,7 @@ class RecipeControllerTest {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
-        when(recipeService.findById(firstRecipeId.toString())).thenReturn(Recipe.builder().id(firstRecipeId).build());
+        when(recipeService.findById(firstRecipeId.toString())).thenReturn(Mono.just(Recipe.builder().id(firstRecipeId).build()));
 
         mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/show"))
                 .andExpect(status().isOk())
@@ -79,7 +80,7 @@ class RecipeControllerTest {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
-        when(recipeService.findCommandById(firstRecipeId.toString())).thenReturn(RecipeCommand.builder().id(firstRecipeId.toString()).build());
+        when(recipeService.findCommandById(firstRecipeId.toString())).thenReturn(Mono.just(RecipeCommand.builder().id(firstRecipeId.toString()).build()));
 
         mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/update"))
                 .andExpect(status().isOk())
@@ -92,7 +93,7 @@ class RecipeControllerTest {
     void saveOrUpdate() {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
         RecipeCommand command = RecipeCommand.builder().id(secondRecipeId.toString()).build();
-        when(recipeService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(command);
+        when(recipeService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -108,7 +109,7 @@ class RecipeControllerTest {
     void saveOrUpdateWithFail() {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
         RecipeCommand command = RecipeCommand.builder().id(secondRecipeId.toString()).build();
-        when(recipeService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(command);
+        when(recipeService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)

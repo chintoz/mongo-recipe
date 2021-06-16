@@ -17,7 +17,7 @@ public class IndexController {
     @RequestMapping({"", "/", "/index"})
     public String getIndexPage(Model model) {
         log.info("index page called");
-        model.addAttribute("recipes", recipeService.findAll());
+        model.addAttribute("recipes", recipeService.findAll().collectList().block());
         return "index";
     }
 }

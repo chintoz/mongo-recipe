@@ -1,7 +1,6 @@
 package es.menasoft.recipe.controllers;
 
 import es.menasoft.recipe.commands.RecipeCommand;
-import es.menasoft.recipe.controllers.handler.ControllerExceptionHandler;
 import es.menasoft.recipe.service.ImageService;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.SneakyThrows;
@@ -15,6 +14,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
@@ -48,7 +48,7 @@ class ImageControllerTest {
     void loadImageForm() {
 
         mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
-        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(RecipeCommand.builder().id(firstRecipeId.toString()).build());
+        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(Mono.just(RecipeCommand.builder().id(firstRecipeId.toString()).build()));
 
         mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/image"))
                 .andExpect(status().isOk())
@@ -77,8 +77,8 @@ class ImageControllerTest {
     public void renderImageFromDb() {
         mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
         byte[] content = "fake Image Test".getBytes();
-        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(RecipeCommand.builder().id(firstRecipeId.toString())
-                .image(ArrayUtils.toObject(content)).build());
+        when(recipeService.findCommandById(eq(firstRecipeId.toString()))).thenReturn(Mono.just(RecipeCommand.builder().id(firstRecipeId.toString())
+                .image(ArrayUtils.toObject(content)).build()));
 
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/" + firstRecipeId.toString() + "/recipeimage"))
                 .andExpect(status().isOk())

@@ -2,17 +2,17 @@ package es.menasoft.recipe.service;
 
 import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.domain.Recipe;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface RecipeService {
 
-    List<Recipe> findAll();
+    Flux<Recipe> findAll();
 
-    Recipe findById(String id);
+    Mono<Recipe> findById(String id);
 
-    RecipeCommand saveRecipeCommand(RecipeCommand command);
-    RecipeCommand findCommandById(String id);
+    Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command);
+    Mono<RecipeCommand> findCommandById(String id);
 
     void deleteById(String id);
 }
