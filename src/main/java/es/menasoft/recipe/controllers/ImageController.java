@@ -1,12 +1,12 @@
 package es.menasoft.recipe.controllers;
 
-import es.menasoft.recipe.commands.RecipeCommand;
+//import es.menasoft.recipe.commands.RecipeCommand;
 import es.menasoft.recipe.service.ImageService;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.http.MediaType;
+//import lombok.SneakyThrows;
+//import org.apache.tomcat.util.http.fileupload.IOUtils;
+//import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
+//import javax.servlet.http.HttpServletResponse;
+//import java.io.ByteArrayInputStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,6 +37,7 @@ public class ImageController {
         return "redirect:/recipe/" + recipeId + "/show";
     }
 
+    /*
     @GetMapping("recipe/{recipeId}/recipeimage")
     @SneakyThrows
     public void renderImageFromDb(@PathVariable String recipeId, HttpServletResponse response) {
@@ -50,4 +51,5 @@ public class ImageController {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         IOUtils.copy(new ByteArrayInputStream(command.getImage()), response.getOutputStream());
     }
+     */
 }

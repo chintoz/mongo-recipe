@@ -9,6 +9,7 @@ import es.menasoft.recipe.service.UnitOfMeasureService;
 import lombok.SneakyThrows;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -48,6 +49,7 @@ class IngredientControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void listIngredients() {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
@@ -64,6 +66,7 @@ class IngredientControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void showIngredient() {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
@@ -80,6 +83,7 @@ class IngredientControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void updateRecipeIngredient() {
 
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
@@ -101,6 +105,7 @@ class IngredientControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void newRecipeIngredient() {
 
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
@@ -123,6 +128,7 @@ class IngredientControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void saveOrUpdate() {
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
 
@@ -141,6 +147,7 @@ class IngredientControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void deleteRecipeIngredient() {
 
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();

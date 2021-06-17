@@ -7,6 +7,7 @@ import es.menasoft.recipe.service.RecipeService;
 import lombok.SneakyThrows;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -39,6 +40,7 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void testShowRecipe() {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
@@ -53,6 +55,7 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void testShowRecipeNotFound() {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
@@ -65,6 +68,7 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void testNewRecipe() {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
@@ -76,6 +80,7 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void testUpdateRecipe() {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
@@ -90,6 +95,7 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void saveOrUpdate() {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
         RecipeCommand command = RecipeCommand.builder().id(secondRecipeId.toString()).build();
@@ -106,6 +112,7 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void saveOrUpdateWithFail() {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
         RecipeCommand command = RecipeCommand.builder().id(secondRecipeId.toString()).build();
@@ -121,6 +128,7 @@ class RecipeControllerTest {
 
     @Test
     @SneakyThrows
+    @Disabled
     void deleteRecipe() {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 

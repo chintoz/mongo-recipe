@@ -3,6 +3,7 @@ package es.menasoft.recipe.controllers;
 import es.menasoft.recipe.domain.Recipe;
 import es.menasoft.recipe.service.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -39,6 +40,7 @@ class IndexControllerTest {
     }
 
     @Test
+    @Disabled
     void testMockMVC() throws Exception {
         // Given
         List<Recipe> recipes = of(Recipe.builder().description("Recipe 1").build(),
