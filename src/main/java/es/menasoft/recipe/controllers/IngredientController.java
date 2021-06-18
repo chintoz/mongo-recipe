@@ -26,14 +26,14 @@ public class IngredientController {
     @GetMapping("/recipe/{recipeId}/ingredients")
     public String listIngredients(@PathVariable String recipeId, Model model) {
         log.debug("Retrieving ingredients for recipe: {}", recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         return "recipe/ingredient/list";
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/{id}/show")
     public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
         model.addAttribute("ingredient", ingredientService
-                .findByRecipeIdAndIngredientId(recipeId, id).block());
+                .findByRecipeIdAndIngredientId(recipeId, id));
         return "recipe/ingredient/show";
     }
 
@@ -42,16 +42,16 @@ public class IngredientController {
         IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block();
         ingredientCommand.setRecipeId(recipeId);
         model.addAttribute("ingredient", ingredientCommand);
-        model.addAttribute("uomList", unitOfMeasureService.listAll().collectList().block());
+        model.addAttribute("uomList", unitOfMeasureService.listAll());
         return "recipe/ingredient/ingredientform";
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/new")
     public String newRecipeIngredient(@PathVariable String recipeId, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         model.addAttribute("ingredient", IngredientCommand.builder().recipeId(recipeId)
                 .unitOfMeasure(UnitOfMeasureCommand.builder().build()).build());
-        model.addAttribute("uomList", unitOfMeasureService.listAll().collectList().block());
+        model.addAttribute("uomList", unitOfMeasureService.listAll());
         return "recipe/ingredient/ingredientform";
     }
 

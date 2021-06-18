@@ -8,9 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -33,10 +36,14 @@ class IndexControllerTest {
 
     IndexController indexController;
 
+    WebTestClient webTestClient;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         indexController = new IndexController(recipeService);
+
+        webTestClient = WebTestClient.bindToController(indexController).build();
     }
 
     @Test
@@ -46,12 +53,16 @@ class IndexControllerTest {
         List<Recipe> recipes = of(Recipe.builder().description("Recipe 1").build(),
                 Recipe.builder().description("Recipe 2").build());
         when(recipeService.findAll()).thenReturn(Flux.fromIterable(recipes));
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+        //MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
         // When / Then
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+        //mockMvc.perform(get("/"))
+        //        .andExpect(status().isOk())
+        //        .andExpect(view().name("index"));
+        webTestClient.get().uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody();
     }
 
     @Test
@@ -62,7 +73,7 @@ class IndexControllerTest {
                 Recipe.builder().description("Recipe 2").build());
         when(recipeService.findAll()).thenReturn(Flux.fromIterable(recipes));
 
-        ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<Flux<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Flux.class);
 
         // When
         String indexPage = indexController.getIndexPage(model);
@@ -71,7 +82,7 @@ class IndexControllerTest {
         assertEquals("index", indexPage);
         verify(recipeService, times(1)).findAll();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-        List<Recipe> recipesResult = argumentCaptor.getValue();
+        List<Recipe> recipesResult = argumentCaptor.getValue().collectList().block();
         assertEquals(recipes, recipesResult);
     }
 
