@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 @Controller
 @RequiredArgsConstructor
@@ -47,7 +48,6 @@ public class IngredientController {
         IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block();
         ingredientCommand.setRecipeId(recipeId);
         model.addAttribute("ingredient", ingredientCommand);
-        model.addAttribute("uomList", unitOfMeasureService.listAll());
         return "recipe/ingredient/ingredientform";
     }
 
@@ -56,7 +56,6 @@ public class IngredientController {
         model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         model.addAttribute("ingredient", IngredientCommand.builder().recipeId(recipeId)
                 .unitOfMeasure(UnitOfMeasureCommand.builder().build()).build());
-        model.addAttribute("uomList", unitOfMeasureService.listAll());
         return "recipe/ingredient/ingredientform";
     }
 
@@ -87,5 +86,10 @@ public class IngredientController {
 
         return "redirect:/recipe/" + recipeId + "/ingredient/" + ingredient.getId() + "/show";
 
+    }
+
+    @ModelAttribute("uomList")
+    public Flux<UnitOfMeasureCommand> populateUomList() {
+        return unitOfMeasureService.listAll();
     }
 }
