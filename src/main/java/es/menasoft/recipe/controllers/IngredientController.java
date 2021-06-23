@@ -67,12 +67,16 @@ public class IngredientController {
     }
 
     @PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@PathVariable String recipeId, @ModelAttribute IngredientCommand command) {
+    public String saveOrUpdate(@PathVariable String recipeId, @ModelAttribute IngredientCommand command, Model model) {
         webDataBinder.validate();
         BindingResult bindingResult = webDataBinder.getBindingResult();
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(error -> log.debug(error.toString()));
-            return "recipe/ingredient/ingredientform";
+            if (command.getId() == null || command.getId().isEmpty()) {
+                return newRecipeIngredient(recipeId, model);
+            } else {
+                return updateRecipeIngredient(recipeId, command.getId(), model);
+            }
         }
 
         command.setRecipeId(recipeId);
