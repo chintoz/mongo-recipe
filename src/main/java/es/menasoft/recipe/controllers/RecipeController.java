@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 //import org.springframework.web.servlet.ModelAndView;
 
@@ -21,6 +22,12 @@ import javax.validation.Valid;
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private WebDataBinder webDataBinder;
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder) {
+        this.webDataBinder = webDataBinder;
+    }
 
     @GetMapping("/recipe/{id}/show")
     public String showRecipe(@PathVariable String id, Model model) {
@@ -37,13 +44,15 @@ public class RecipeController {
 
     @GetMapping("/recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(id).block());
+        model.addAttribute("recipe", recipeService.findCommandById(id));
         return "recipe/recipeform";
     }
 
     @PostMapping("recipe")
     @SuppressWarnings("SpringMVCViewInspection")
-    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult) {
+    public String saveOrUpdate(@ModelAttribute("recipe") RecipeCommand command) {
+        webDataBinder.validate();
+        BindingResult bindingResult = webDataBinder.getBindingResult();
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(error -> log.debug(error.toString()));
             return "recipe/recipeform";

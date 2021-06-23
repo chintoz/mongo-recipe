@@ -33,11 +33,17 @@
                                 <div class="col-md-3 form-group">
                                     <label>Description:</label>
                                     <input type="text" class="form-control" th:field="*{description}"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('description')}" th:class="invalid-feedback">
+                                        <li th:each="err : ${#fields.errors('description')}" th:text="${err}">
+                                    </span>
                                 </div>
 
                                 <div class="col-md-3 form-group">
                                     <label>Amount:</label>
                                     <input type="number" class="form-control" th:field="*{amount}"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('amount')}" th:class="invalid-feedback">
+                                        <li th:each="err : ${#fields.errors('amount')}" th:text="${err}">
+                                    </span>
                                 </div>
 
                                 <div class="col-md-3 form-group">
@@ -49,6 +55,9 @@
                                                 th:selected="${uomEach.id.equals(ingredient.unitOfMeasure.id)}"
                                                 th:text="${uomEach.description}">Each</option>
                                     </select>
+                                    <span class="help-block" th:if="${#fields.hasErrors('unitOfMeasure')}" th:class="invalid-feedback">
+                                        <li th:each="err : ${#fields.errors('unitOfMeasure')}" th:text="${err}">
+                                    </span>
                                 </div>
                             </div>
                         </div>
