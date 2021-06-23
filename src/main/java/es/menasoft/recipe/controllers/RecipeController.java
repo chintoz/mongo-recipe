@@ -1,20 +1,17 @@
 package es.menasoft.recipe.controllers;
 
 import es.menasoft.recipe.commands.RecipeCommand;
-//import es.menasoft.recipe.exception.NotFoundException;
+import es.menasoft.recipe.exception.NotFoundException;
 import es.menasoft.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-//import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.servlet.ModelAndView;
-
-import javax.validation.Valid;
-//import java.util.Map;
+import org.thymeleaf.exceptions.TemplateInputException;
 
 @Controller
 @RequiredArgsConstructor
@@ -68,13 +65,13 @@ public class RecipeController {
         return "redirect:/";
     }
 
-    /*
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound(NotFoundException exception) {
+    @ExceptionHandler({NotFoundException.class, TemplateInputException.class})
+    public String handleNotFound(NotFoundException exception, Model model) {
         log.error("Handling not found exception");
         log.error(exception.getMessage());
-        return new ModelAndView("404error", Map.of("exception", exception));
+        model.addAttribute("exception", exception);
+        return "404error";
     }
-     */
+
 }
