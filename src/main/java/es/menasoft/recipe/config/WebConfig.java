@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class WebConfig {
 
     @Bean
-    RouterFunction<?> routers(RecipeService recipeService) {
+    public RouterFunction<?> routers(RecipeService recipeService) {
         return RouterFunctions.route(RequestPredicates.GET("/api/recipes"),
                 serverRequest -> ServerResponse
                         .ok()
